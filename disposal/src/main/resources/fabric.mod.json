@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"id": "seers-disposal",
+	"version": "${version}",
+	"name": "Seer's Disposal",
+	"description": "A super simple mod for getting rid of unwanted items",
+	"authors": [
+		"seeruk"
+	],
+	"contact": {
+		"homepage": "https://github.com/seeruk/fabric-mods",
+		"sources": "https://github.com/seeruk/fabric-mods"
+	},
+	"license": "MIT",
+	"icon": "assets/seers-disposal/icon.png",
+	"environment": "server",
+	"entrypoints": {
+		"main": [
+			"dev.seeruk.mod.fabric.disposal.DisposalMod"
+		]
+	},
+	"mixins": [],
+	"depends": {
+		"fabricloader": ">=0.16.2",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {}
+}

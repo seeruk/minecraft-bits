@@ -1,0 +1,17 @@
+{
+    "required": true,
+    "package": "dev.seeruk.mod.fabric.propswap.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "mixins": [
+        "AxeItemMixin",
+        "FenceBlockMixin",
+        "HorizontalConnectingBlockMixin",
+        "PaneBlockMixin",
+        "PickaxeItemMixin",
+        "PlayerManagerMixin",
+        "WallBlockMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}
