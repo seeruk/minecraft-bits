@@ -11,4 +11,4 @@ pluginManagement {
 
 rootProject.name = "seers-fabric-mods"
 
-include "disposal", "propswap"
+include "fabric-disposal", "fabric-jsq", "fabric-propswap"

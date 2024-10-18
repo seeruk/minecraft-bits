@@ -1,7 +1,14 @@
-plugins {
-    id "java"
-}
+evaluationDependsOnChildren()
 
-subprojects {
-    apply plugin: "java"
+subprojects { Project pr ->
+    tasks.register("copyLibs", Copy) {
+        from(pr.layout.buildDirectory.dir("libs"))
+        into("$rootDir/target")
+    }
+
+    tasks.named("build") { Task task ->
+        task.finalizedBy("copyLibs")
+    }
+
+    clean.delete "$rootDir/target"
 }

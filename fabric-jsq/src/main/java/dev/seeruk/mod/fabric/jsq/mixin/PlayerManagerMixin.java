@@ -1,4 +1,4 @@
-package dev.seeruk.mod.fabric.propswap.mixin;
+package dev.seeruk.mod.fabric.jsq.mixin;
 
 import net.minecraft.server.PlayerManager;
 import net.minecraft.text.Text;
