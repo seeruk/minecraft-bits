@@ -1,3 +1,30 @@
+plugins {
+    id "fabric-loom" version "1.7-SNAPSHOT" apply false
+    id "org.jetbrains.gradle.plugin.idea-ext" version "1.0.1"
+}
+
+allprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+
+        maven {
+            name = "Nucleoid"
+            url = "https://maven.nucleoid.xyz/"
+        }
+
+        maven {
+            name = "Paper"
+            url = "https://repo.papermc.io/repository/maven-public/"
+        }
+
+        maven {
+            name = "William278"
+            url = "https://repo.william278.net/releases/"
+        }
+    }
+}
+
 evaluationDependsOnChildren()
 
 subprojects { Project pr ->

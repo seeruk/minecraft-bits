@@ -1,14 +1,21 @@
 pluginManagement {
-	repositories {
-		maven {
-			name = "Fabric"
-			url = "https://maven.fabricmc.net/"
-		}
-		mavenCentral()
-		gradlePluginPortal()
-	}
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+
+        maven {
+            name = "Fabric"
+            url = "https://maven.fabricmc.net/"
+        }
+    }
 }
 
 rootProject.name = "seers-fabric-mods"
 
-include "fabric-disposal", "fabric-jsq", "fabric-propswap"
+include(
+    "common-jsq",
+    "fabric-disposal",
+    "fabric-jsq",
+    "fabric-propswap",
+    "velocity-jsq"
+)

@@ -1,0 +1,20 @@
+[versions]
+adventure = "4.17.0"
+adventure-fabric = "5.14.1"
+fabric-placeholder-api = "2.4.1+1.21"
+jackson = "2.18.0"
+junit-jupiter = "5.10.3"
+lettuce = "6.3.2.RELEASE"
+protobuf-java = "4.28.2"
+
+[libraries]
+adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
+adventure-fabric = { module = "net.kyori:adventure-platform-fabric", version.ref = "adventure-fabric" }
+fabric-placeholder-api = { module = "eu.pb4:placeholder-api", version.ref = "fabric-placeholder-api" }
+jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
+jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
+jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
+lettuce-core = { module = "io.lettuce:lettuce-core", version.ref = "lettuce" }
+protobuf-java = { module = "com.google.protobuf:protobuf-java", version.ref = "protobuf-java" }

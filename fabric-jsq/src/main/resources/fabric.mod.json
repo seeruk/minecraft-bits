@@ -15,7 +15,7 @@
 	"icon": "assets/seers-jsq/icon.png",
 	"environment": "server",
 	"entrypoints": {
-		"main": [
+		"server": [
 			"dev.seeruk.mod.fabric.jsq.JsqMod"
 		]
 	},
