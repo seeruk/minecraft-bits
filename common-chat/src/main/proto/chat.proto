@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package chat;
+
+option java_multiple_files = true;
+option java_package = "dev.seeruk.common.chat";
+option java_outer_classname = "ChatProto";
+
+enum ChatEventType {
+  Chat = 0;
+  Emote = 1;
+  Game = 2;
+}
+
+message ChatEvent {
+  ChatEventType type = 1;
+  string server = 2;
+  string player_uuid = 3;
+  string player_name = 4;
+  string formatted = 5;
+  string message = 6;
+}

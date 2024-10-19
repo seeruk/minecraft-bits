@@ -3,9 +3,10 @@
     "package": "dev.seeruk.mod.fabric.chat.mixin",
     "compatibilityLevel": "JAVA_21",
     "mixins": [
+        "MeCommandMixin",
         "PlayerEntityMixin",
         "RegistryLoaderMixin",
-        "ServerPlayNetworkmanagerMixin"
+        "ServerPlayNetworkHandlerMixin"
     ],
     "injectors": {
         "defaultRequire": 1

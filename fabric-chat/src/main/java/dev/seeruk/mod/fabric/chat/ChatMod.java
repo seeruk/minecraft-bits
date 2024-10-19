@@ -2,19 +2,16 @@ package dev.seeruk.mod.fabric.chat;
 
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import dev.seeruk.mod.fabric.chat.config.Config;
-import io.lettuce.core.RedisClient;
-import io.lettuce.core.codec.ByteArrayCodec;
-import io.lettuce.core.codec.RedisCodec;
-import io.lettuce.core.codec.StringCodec;
-import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
+import dev.seeruk.mod.fabric.chat.message.ChatListener;
+import lombok.Getter;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.message.MessageType;
-import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,24 +23,31 @@ import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import java.util.Optional;
 
-public class ChatMod implements DedicatedServerModInitializer {
-	public static final String MOD_ID = "seers-jsq";
+public class ChatMod extends Container implements DedicatedServerModInitializer {
+	public static final String MOD_ID = "seers-chat";
 
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	private RedisClient redisClient;
-	private StatefulRedisPubSubConnection<String, byte[]> redisConn;
-	private MinecraftServer server;
+	public static RegistryKey<MessageType> MESSAGE_TYPE_SEER = RegistryKey.of(
+		RegistryKeys.MESSAGE_TYPE,
+		Identifier.of(MOD_ID, "chat")
+	);
+
+	@Getter
+    private static ChatMod instance;
 
 	@Override
 	public void onInitializeServer() {
+		instance = this;
+
 		saveResource("config.dist.yml", true);
 
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
-			this.server = server;
+			setConfig(getConfigWithDefaults().orElseThrow());
+			setServer(server);
 			onServerReady();
 		});
 
@@ -53,28 +57,20 @@ public class ChatMod implements DedicatedServerModInitializer {
 	}
 
 	private void onServerReady() {
-		var config = getConfigWithDefaults().orElseThrow();
-
-		// Connect to Redis
-		redisClient = RedisClient.create(config.redisUri);
-		redisConn = redisClient.connectPubSub(RedisCodec.of(StringCodec.UTF8, ByteArrayCodec.INSTANCE));
-
-		ServerMessageEvents.CHAT_MESSAGE.register((message, player, params) -> {
-			LOGGER.info("Message is: {}", message.toString());
-		});
-
 		// Listen for Redis messages
-		//redisConn.addListener(new JsqListener(LOGGER, server, MiniMessage.miniMessage()));
-		//redisConn.async().subscribe(config.redisChannel);
+		getRedisConn().addListener(new ChatListener(getConfig(), LOGGER, getServer()));
+		getRedisConn().async().subscribe(config.redisChannel);
+
+		getChatMessageSendListener().register();
 
 		LOGGER.info("Initialised, listening on Redis channel: {}", config.redisChannel);
 	}
 
 	private void onServerStopping() {
-		redisClient.close();
-		redisConn.close();
-		redisClient = null;
-		redisConn = null;
+		getRedisClient().close();
+		getRedisConn().close();
+		setRedisClient(null);
+		setRedisConn(null);
 	}
 
 	private Path getConfigFolder() {

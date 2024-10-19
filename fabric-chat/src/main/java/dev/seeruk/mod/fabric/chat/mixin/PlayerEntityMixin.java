@@ -1,17 +1,27 @@
 package dev.seeruk.mod.fabric.chat.mixin;
 
-import eu.pb4.placeholders.api.parsers.LegacyFormattingParser;
-import eu.pb4.placeholders.api.parsers.MarkdownLiteParserV1;
+import dev.seeruk.mod.fabric.chat.ChatMod;
+import eu.pb4.placeholders.api.ParserContext;
+import eu.pb4.placeholders.api.PlaceholderContext;
+import eu.pb4.placeholders.api.Placeholders;
+import eu.pb4.placeholders.api.parsers.NodeParser;
 import eu.pb4.placeholders.api.parsers.ParserBuilder;
 import eu.pb4.placeholders.api.parsers.TagParser;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin {
+    @Unique
+    private static final NodeParser nameParser = ParserBuilder.of()
+        .legacyAll()
+        .add(TagParser.DEFAULT_SAFE)
+        .build();
+
     @ModifyArg(
         method = "getDisplayName",
         at = @At(
@@ -20,12 +30,11 @@ public class PlayerEntityMixin {
         )
     )
     public Text formatName(Text original) {
-        var builder = ParserBuilder.of()
-            .add(TagParser.DEFAULT_SAFE)
-            .add(MarkdownLiteParserV1.ALL)
-            .add(LegacyFormattingParser.ALL)
-            .build();
+        var config = ChatMod.getInstance().getConfig();
 
-        return builder.parseNode("≈Seer").toText();
+        return Placeholders.parseText(
+            nameParser.parseText(config.displayNameFormat, ParserContext.of()),
+            PlaceholderContext.of((PlayerEntity)(Object)this)
+        );
     }
 }

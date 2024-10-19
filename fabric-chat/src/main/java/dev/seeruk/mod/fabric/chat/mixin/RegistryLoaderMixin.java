@@ -1,9 +1,9 @@
 package dev.seeruk.mod.fabric.chat.mixin;
 
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryLoader;
-import net.minecraft.registry.RegistryOps;
+import dev.seeruk.mod.fabric.chat.ChatMod;
+import net.minecraft.network.message.MessageType;
+import net.minecraft.registry.*;
+import net.minecraft.text.Decoration;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Coerce;
@@ -38,7 +38,14 @@ public class RegistryLoaderMixin {
         for (var entry : list) {
             var registry = entry.registry();
             if (registry.getKey().equals(RegistryKeys.MESSAGE_TYPE)) {
-                // TODO: Inject
+                Registry.register(
+                    (Registry<MessageType>) registry,
+                    ChatMod.MESSAGE_TYPE_SEER,
+                    new MessageType(
+                        Decoration.ofChat("%2$s"),
+                        Decoration.ofChat("%2$s")
+                    )
+                );
             }
         }
     }

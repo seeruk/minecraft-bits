@@ -13,6 +13,7 @@ pluginManagement {
 rootProject.name = "seers-fabric-mods"
 
 include(
+    "common-chat",
     "common-jsq",
     "fabric-chat",
     "fabric-disposal",
