@@ -37,7 +37,7 @@ public class ChatMod extends Container implements DedicatedServerModInitializer 
 	);
 
 	@Getter
-    private static ChatMod instance;
+	private static ChatMod instance;
 
 	@Override
 	public void onInitializeServer() {
