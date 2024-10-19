@@ -1,0 +1,13 @@
+{
+    "required": true,
+    "package": "dev.seeruk.mod.fabric.chat.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "mixins": [
+        "PlayerEntityMixin",
+        "RegistryLoaderMixin",
+        "ServerPlayNetworkmanagerMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

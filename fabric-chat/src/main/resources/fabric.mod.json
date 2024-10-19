@@ -1,0 +1,33 @@
+{
+	"schemaVersion": 1,
+	"id": "seers-chat",
+	"version": "${version}",
+	"name": "Seer's Chat",
+	"description": "A chat mod",
+	"authors": [
+		"seeruk"
+	],
+	"contact": {
+		"homepage": "https://github.com/seeruk/fabric-mods",
+		"sources": "https://github.com/seeruk/fabric-mods"
+	},
+	"license": "MIT",
+	"icon": "assets/seers-chat/icon.png",
+	"environment": "server",
+	"entrypoints": {
+		"server": [
+			"dev.seeruk.mod.fabric.chat.ChatMod"
+		]
+	},
+	"accessWidener": "seers-chat.accesswidener",
+	"mixins": [
+		"seers-chat.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.2",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {}
+}

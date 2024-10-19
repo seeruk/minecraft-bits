@@ -14,13 +14,14 @@ base {
 loom {
 	splitEnvironmentSourceSets()
 
+	accessWidenerPath = file("src/main/resources/seers-chat.accesswidener")
+
 	mods {
 		"modid" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}
 	}
-
 }
 
 dependencies {
@@ -31,17 +32,13 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	modImplementation libs.adventure.fabric
 	modImplementation libs.fabric.placeholder.api
-
-	shadow project(":common-jsq")
 
 	shadow libs.jackson.core
 	shadow libs.jackson.annotations
 	shadow libs.jackson.databind
 	shadow libs.jackson.dataformat.yaml
 	shadow libs.lettuce.core
-	shadow libs.protobuf.java
 }
 
 tasks.withType(JavaCompile).configureEach {
