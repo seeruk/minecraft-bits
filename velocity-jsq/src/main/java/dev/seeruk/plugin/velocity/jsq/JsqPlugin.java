@@ -5,15 +5,17 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
+import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
-import dev.dejvokep.boostedyaml.YamlDocument;
-import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
-import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
-import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
-import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
-import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
+import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.ProxyServer;
+import dev.seeruk.common.config.ConfigManager;
 import dev.seeruk.common.jsq.JsqEvent;
+import dev.seeruk.plugin.velocity.jsq.config.Config;
+import dev.seeruk.plugin.velocity.jsq.discord.DiscordContainer;
+import dev.seeruk.plugin.velocity.jsq.discord.DiscordListener;
+import dev.seeruk.plugin.velocity.jsq.discord.DiscordMessenger;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.codec.ByteArrayCodec;
 import io.lettuce.core.codec.RedisCodec;
@@ -21,58 +23,50 @@ import io.lettuce.core.codec.StringCodec;
 import io.lettuce.core.pubsub.api.async.RedisPubSubAsyncCommands;
 import org.slf4j.Logger;
 
-import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 @Plugin(
-    id = "velocity-jsq",
+    id = "seers-jsq",
     name = "Seer's Velocity Join, Switch, Quit",
     description = "Adds network-wide join/switch/quit messages to your server so players know what's going on",
-    version = BuildConstants.VERSION
+    version = BuildConstants.VERSION,
+    dependencies = {
+        @Dependency(id = "seers-discord", optional = true)
+    }
 )
 public class JsqPlugin {
 
     private final Path dataDirectory;
     private final Logger logger;
+    private final ProxyServer server;
 
-    private YamlDocument config;
+    private Config config;
     private RedisPubSubAsyncCommands<String, byte[]> redisConn;
 
     @Inject
-    public JsqPlugin(
-        @DataDirectory Path dataDirectory,
-        Logger logger
-    ) {
+    public JsqPlugin(@DataDirectory Path dataDirectory, Logger logger, ProxyServer server) {
         this.dataDirectory = dataDirectory;
         this.logger = logger;
+        this.server = server;
     }
 
     @Subscribe
-    public void onProxyInitialization(ProxyInitializeEvent event) throws IOException {
-        // Initialise configuration
-        this.config = YamlDocument.create(
-            new File(dataDirectory.toFile(), "config.yml"),
-            Objects.requireNonNull(getClass().getResourceAsStream("/config.yml")),
-            GeneralSettings.DEFAULT,
-            LoaderSettings.builder()
-                .setAutoUpdate(true)
-                .build(),
-            DumperSettings.DEFAULT,
-            UpdaterSettings.builder()
-                .setVersioning(new BasicVersioning("configVersion"))
-                .build()
-        );
+    public void onProxyInitialization(ProxyInitializeEvent event) {
+        var configManager = new ConfigManager(dataDirectory, logger, this);
+        // Overwrite the dist config, so it's always up-to-date
+        configManager.saveResource("config.dist.yml", true);
+        // Fetch the user-defined config
+        config = configManager.getConfigWithDefaults(Config.class).orElseThrow();
 
-        this.config.update();
-        this.config.save();
-
-        this.redisConn = RedisClient.create(this.config.getString("redisUri"))
+        this.redisConn = RedisClient.create(config.redisUri)
             .connectPubSub(RedisCodec.of(StringCodec.UTF8, ByteArrayCodec.INSTANCE))
             .async();
+
+        if (server.getPluginManager().isLoaded("seers-discord")) {
+            server.getEventManager().register(this, new DiscordListener());
+        }
 
         logger.info("Initialised successfully");
     }
@@ -91,22 +85,9 @@ public class JsqPlugin {
                 .orElse("")
         );
 
-        var messageType = previousServer.map(server -> "switch").orElse("join");
+        var messageConfig = previousServer.map(server -> config.onSwitch).orElse(config.onJoin);
 
-        var channel = this.config.getString("redisChannel");
-        var prefix = this.config.getString(messageType + "MessagePrefix");
-        var suffix = this.config.getString(messageType + "MessageSuffix");
-        var messages = this.config.getStringList(messageType + "Messages");
-
-        var format = prefix + getRandomItem(messages) + suffix;
-
-        var protoEvent = JsqEvent.newBuilder()
-            .setMessage(replacePlaceholders(format, placeholders))
-            .setPlayerUuid(player.getUniqueId().toString())
-            .setPlayerName(player.getUsername())
-            .build();
-
-        this.redisConn.publish(channel, protoEvent.toByteArray());
+        this.handleJsqEvent(player, messageConfig, placeholders);
     }
 
     @Subscribe
@@ -121,20 +102,33 @@ public class JsqPlugin {
                 .orElse("unknown")
         );
 
-        var channel = this.config.getString("redisChannel");
-        var prefix = this.config.getString("quitMessagePrefix");
-        var suffix = this.config.getString("quitMessageSuffix");
-        var messages = this.config.getStringList("quitMessages");
+        this.handleJsqEvent(player, config.onQuit, placeholders);
+    }
 
-        var format = prefix + getRandomItem(messages) + suffix;
+    private void handleJsqEvent(Player player, Config.MessageConfig messageConfig, Placeholders placeholders) {
+        var message = getRandomItem(messageConfig.messages);
+
+        var chatMessage = replacePlaceholders(buildMessage(messageConfig.chat, message), placeholders);
+        var discordMessage = replacePlaceholders(buildMessage(messageConfig.discord, message), placeholders);
 
         var protoEvent = JsqEvent.newBuilder()
-            .setMessage(replacePlaceholders(format, placeholders))
+            .setMessage(chatMessage)
             .setPlayerUuid(player.getUniqueId().toString())
             .setPlayerName(player.getUsername())
             .build();
 
-        this.redisConn.publish(channel, protoEvent.toByteArray());
+        this.redisConn.publish(config.redisChannel, protoEvent.toByteArray());
+
+        if (server.getPluginManager().isLoaded("seers-discord")) {
+            DiscordContainer.getJda().ifPresent(jda -> {
+                var messenger = new DiscordMessenger(jda, config.discordChannelId);
+                messenger.sendMessageEmbed(player, discordMessage, ColorUtil.getColorByName(messageConfig.discord.colour));
+            });
+        }
+    }
+
+    private String buildMessage(Config.ChatMessageConfig config, String message) {
+        return config.prefix + message + config.suffix;
     }
 
     private String replacePlaceholders(String input, Placeholders placeholders) {

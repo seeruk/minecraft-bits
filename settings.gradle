@@ -10,14 +10,17 @@ pluginManagement {
     }
 }
 
-rootProject.name = "seers-fabric-mods"
+rootProject.name = "minecraft-bits"
 
 include(
     "common-chat",
+    "common-config",
     "common-jsq",
     "fabric-chat",
     "fabric-disposal",
     "fabric-jsq",
     "fabric-propswap",
+    "velocity-discord",
+    "velocity-discord-chat",
     "velocity-jsq"
 )

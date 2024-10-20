@@ -3,8 +3,10 @@ adventure = "4.17.0"
 adventure-fabric = "5.14.1"
 fabric-placeholder-api = "2.4.1+1.21"
 jackson = "2.18.0"
+jda = "5.1.2"
 junit-jupiter = "5.10.3"
 lettuce = "6.3.2.RELEASE"
+log4j = "2.22.1"
 protobuf-java = "4.28.2"
 
 [libraries]
@@ -16,6 +18,10 @@ jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref
 jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson" }
+jda = { module = "net.dv8tion:JDA", version.ref = "jda" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
 lettuce-core = { module = "io.lettuce:lettuce-core", version.ref = "lettuce" }
+log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j" }
+log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
+log4j-slf4j2-impl = { module = "org.apache.logging.log4j:log4j-slf4j2-impl", version.ref = "log4j" }
 protobuf-java = { module = "com.google.protobuf:protobuf-java", version.ref = "protobuf-java" }

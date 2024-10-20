@@ -35,11 +35,8 @@ dependencies {
 	modImplementation libs.fabric.placeholder.api
 
 	shadow project(":common-jsq")
+	shadow project(":common-config")
 
-	shadow libs.jackson.core
-	shadow libs.jackson.annotations
-	shadow libs.jackson.databind
-	shadow libs.jackson.dataformat.yaml
 	shadow libs.lettuce.core
 	shadow libs.protobuf.java
 }

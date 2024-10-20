@@ -8,11 +8,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation libs.junit.jupiter
-
     implementation libs.protobuf.java
-
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -20,7 +16,6 @@ java {
     toolchain.setLanguageVersion(JavaLanguageVersion.of(17))
 }
 
-tasks.named('test') {
-    // Use JUnit Platform for unit tests.
-    useJUnitPlatform()
+jar {
+    enabled = false
 }
