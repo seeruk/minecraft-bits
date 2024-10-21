@@ -8,14 +8,10 @@ repositories {
 }
 
 dependencies {
-    implementation libs.protobuf.java
+    api libs.protobuf.java
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain.setLanguageVersion(JavaLanguageVersion.of(17))
-}
-
-jar {
-    enabled = false
 }

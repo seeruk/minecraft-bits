@@ -18,7 +18,6 @@ dependencies {
     shadow project(":common-config")
 
     shadow libs.jda
-    shadow libs.protobuf.java
 }
 
 java {

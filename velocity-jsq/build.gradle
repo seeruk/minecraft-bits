@@ -20,7 +20,8 @@ dependencies {
     compileOnly project(":velocity-discord")
 
     shadow libs.lettuce.core
-    shadow libs.protobuf.java
+    compileOnly libs.jda
+    compileOnly libs.protobuf.java
 }
 
 java {

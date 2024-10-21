@@ -5,49 +5,57 @@ discordChannelId: changeme
 
 join:
   chat:
-    prefix: "<gray>[</gray><green>+</green><gray>]</gray> "
-    suffix: " <gray>({next_server})</gray>"
+    prefix: "<green>▶</green> "
+    suffix: ""
   discord:
     colour: green
     prefix: ""
     suffix: ""
   messages:
-  - "{player} <yellow>showed up. The party can finally start!</yellow>"
-  - "{player} <yellow>arrived. We're back in business!</yellow>"
-  - "{player} <yellow>connected. Better late than never</yellow>"
-  - "{player} <yellow>is here. Great.</yellow>"
-  - "{player} <yellow>is here. Let's goooo</yellow>"
-  - "{player} <yellow>is here. Brace yourselves!</yellow>"
-  - "{player} <yellow>just joined. Everybody wave!</yellow>"
-  - "{player} <yellow>is here! Yes! Gosh</yellow> {player} <yellow>is great</yellow>"
-  - "{player} <yellow>logged in. How long 'til they fall in lava?</yellow>"
+  - "{player} <green>showed up. The party can finally start!</green>"
+  - "{player} <green>arrived. We're back in business!</green>"
+  - "{player} <green>connected. Better late than never</green>"
+  - "{player} <green>is here. Great.</green>"
+  - "{player} <green>is here. Let's goooo</green>"
+  - "{player} <green>is here. Everybody wave!</green>"
+  - "{player} <green>just joined. Brace yourselves!</green>"
+  - "{player} <green>is here! Yes! Gosh</green> {player} <green>is great</green>"
+  - "{player} <green>logged in. How long 'til they fall in lava?</green>"
+  - "{player} <green>just logged in. Who invited the pro?</green>"
+  - "{player} <green>just joined. What could possibly go wrong?</green>"
 
 switch:
   chat:
-    prefix: "<gray>[</gray><light_purple>></light_purple><gray>]</gray> "
+    prefix: "<light_purple>↔</light_purple> "
     suffix: ""
   discord:
-    colour: purple
+    colour: magenta
     prefix: ""
     suffix: ""
   messages:
-  - "{player} <yellow>switched from</yellow> <gray>{previous_server}</gray> <yellow>to</yellow> <gray>{next_server}</gray>"
+  - "{player} <light_purple>switched from</light_purple> <gray>{previous_server}</gray> <light_purple>to</light_purple> <gray>{next_server}</gray>"
 
 quit:
   chat:
-    prefix: "<gray>[</gray><red>-</red><gray>]</gray> "
+    prefix: "<red>◀</red> "
     suffix: ""
   discord:
     colour: red
     prefix: ""
     suffix: ""
   messages:
-  - "{player} <yellow>has left. The game just got 10% easier</yellow>"
-  - "{player} <yellow>disconnected. Did they rage quit?..</yellow>"
-  - "{player} <yellow>rage quit</yellow>"
-  - "{player} <yellow>has left. Finally, some peace and quiet</yellow>"
-  - "{player} <yellow>bailed. Guess they had better things to do</yellow>"
-  - "{player} <yellow>disconnected. We’re doomed without them... or not</yellow>"
-  - "{player} <yellow>logged out. Time for the real players to shine</yellow>"
-  - "{player} <yellow>bailed. Did someone forget to feed them?</yellow>"
-  - "{player} <yellow>is gone. Panic!</yellow>"
+  - "{player} <red>has left. The game just got 10% easier</red>"
+  - "{player} <red>disconnected. Did they rage quit?..</red>"
+  - "{player} <red>rage quit</red>"
+  - "{player} <red>has left. Finally, some peace and quiet</red>"
+  - "{player} <red>bailed. Guess they had better things to do</red>"
+  - "{player} <red>disconnected. We’re doomed without them... or not</red>"
+  - "{player} <red>logged out. Time for the real players to shine</red>"
+  - "{player} <red>bailed. Did someone forget to feed them?</red>"
+  - "{player} <red>is gone. Panic!</red>"
+  - "{player} <red>left. Phew, the server can have a rest</red>"
+  - "{player} <red>logged out. No rage quits, just graceful exits.</red>"
+  - "{player} <red>vanished. And just like that, they're... gone.</red>"
+  - "{player} <red>logged off. They’ve left the server, but not our hearts ❤</red>"
+  - "{player} <red>disconnected. Probably to avoid another embarrassing death</red>"
+  - "{player} <red>logged off. Was it something we said?</red>"
