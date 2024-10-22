@@ -7,6 +7,7 @@ import lombok.Getter;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.kyori.adventure.platform.fabric.FabricServerAudiences;
 import net.minecraft.network.message.MessageType;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import java.nio.file.Path;
 
 public class ChatMod extends Container implements DedicatedServerModInitializer {
+
 	public static final String MOD_ID = "seers-chat";
 
 	// This logger is used to write text to the console and the log file.
@@ -41,6 +43,7 @@ public class ChatMod extends Container implements DedicatedServerModInitializer 
 
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 			setConfig(configManager.getConfigWithDefaults(Config.class).orElseThrow());
+			setAdventure(FabricServerAudiences.of(server));
 			setServer(server);
 			onServerReady();
 		});
@@ -52,7 +55,7 @@ public class ChatMod extends Container implements DedicatedServerModInitializer 
 
 	private void onServerReady() {
 		// Listen for Redis messages
-		getRedisConn().addListener(new ChatListener(getConfig(), LOGGER, getServer()));
+		getRedisConn().addListener(new ChatListener(getAdventure(), getConfig(), LOGGER, getServer()));
 		getRedisConn().async().subscribe(config.redisChannel);
 
 		getChatMessageSendListener().register();
@@ -63,6 +66,8 @@ public class ChatMod extends Container implements DedicatedServerModInitializer 
 	private void onServerStopping() {
 		getRedisClient().close();
 		getRedisConn().close();
+
+		setAdventure(null);
 		setRedisClient(null);
 		setRedisConn(null);
 	}

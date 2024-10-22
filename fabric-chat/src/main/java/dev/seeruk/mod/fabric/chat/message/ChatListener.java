@@ -4,11 +4,8 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import dev.seeruk.common.chat.ChatEvent;
 import dev.seeruk.mod.fabric.chat.config.Config;
 import dev.seeruk.mod.fabric.chat.text.TextUtils;
-import eu.pb4.placeholders.api.node.TextNode;
-import eu.pb4.placeholders.api.parsers.NodeParser;
-import eu.pb4.placeholders.api.parsers.ParserBuilder;
-import eu.pb4.placeholders.api.parsers.TagParser;
 import io.lettuce.core.pubsub.RedisPubSubAdapter;
+import net.kyori.adventure.platform.fabric.FabricServerAudiences;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
@@ -18,17 +15,19 @@ import org.slf4j.Logger;
  * pub/sub channel. Messages are formatted using the given component serializer.
  */
 public class ChatListener extends RedisPubSubAdapter<String, byte[]> {
-    private static final NodeParser chatParser = ParserBuilder.of()
-        .markdown()
-        .legacyAll()
-        .add(TagParser.DEFAULT_SAFE)
-        .build();
 
+    private final FabricServerAudiences adventure;
     private final Config config;
     private final Logger logger;
     private final MinecraftServer server;
 
-    public ChatListener(Config config, Logger logger, MinecraftServer server) {
+    public ChatListener(
+        FabricServerAudiences adventure,
+        Config config,
+        Logger logger,
+        MinecraftServer server
+    ) {
+        this.adventure = adventure;
         this.config = config;
         this.logger = logger;
         this.server = server;
@@ -58,9 +57,10 @@ public class ChatListener extends RedisPubSubAdapter<String, byte[]> {
                 ? TextUtils.deserialize(event.getFormatted())
                 : Text.of(event.getMessage());
 
-            server.getPlayerManager().getPlayerList().forEach(player ->
-                player.sendMessage(chatParser.parseNode(TextNode.convert(formatted)).toText())
-            );
+            server.getPlayerManager().getPlayerList().forEach(player -> {
+                var audience = adventure.audience(player);
+                audience.sendMessage(formatted);
+            });
         });
     }
 }

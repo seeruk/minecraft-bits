@@ -31,7 +31,9 @@ public class MeCommandMixin {
             var config = ChatMod.getInstance().getConfig();
             var player = commandSource.getPlayer();
 
-            var decorated = Formatter.decorateText(player, message.getContent(), Formatter.canPlayerUseGlobalPlaceholders(player));
+            var messagePlainText = message.getContent().getString();
+
+            var decorated = Formatter.decoratePlainText(player, messagePlainText, Formatter.canPlayerUseGlobalPlaceholders(player));
             var result = Formatter.applyFormat(config.emoteFormat, player, decorated);
 
             EmoteMessageSendCallback.EVENT.invoker().interact(player, result, decorated);

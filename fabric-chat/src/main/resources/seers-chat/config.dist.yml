@@ -8,7 +8,7 @@ redisChannel: seers-chat:main
 displayNameFormat: "%player:name%"
 
 # Formatting available: Placeholders, Legacy, Markdown Lite, Tags
-chatFormat: "%player:displayname_visual% <gray>»</gray> {text}"
+chatFormat: "%player:displayname% <gray>»</gray> {text}"
 
 # Formatting available: Placeholders, Legacy, Markdown Lite, Tags
-emoteFormat: "<gray><italic>* %player:displayname_visual% {text}</italic></gray>"
+emoteFormat: "<gray><italic>* %player:displayname% {text}</italic></gray>"

@@ -25,7 +25,7 @@ public class ServerPlayNetworkHandlerMixin {
     private Text decorate(MessageDecorator instance, ServerPlayerEntity player, Text text) {
         // TODO: Do we need to call the original decorator still?
         var config = ChatMod.getInstance().getConfig();
-        var message = Formatter.decorateText(player, text, Formatter.canPlayerUseGlobalPlaceholders(player));
+        var message = Formatter.decoratePlainText(player, text.getString());
         var result = Formatter.applyFormat(config.chatFormat, player, message);
 
         ChatMessageSendCallback.EVENT.invoker().interact(player, result, message);

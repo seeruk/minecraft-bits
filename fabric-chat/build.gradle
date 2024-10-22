@@ -37,6 +37,9 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation libs.fabric.placeholder.api
 
+	modImplementation libs.adventure.fabric
+	include libs.adventure.fabric
+
 	shadow project(":common-chat")
 	shadow project(":common-config")
 
