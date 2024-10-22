@@ -12,12 +12,17 @@ base {
 }
 
 dependencies {
+    compileOnly libs.lombok
+    annotationProcessor libs.lombok
+
     annotationProcessor "com.velocitypowered:velocity-api:3.3.0-SNAPSHOT"
     compileOnly "com.velocitypowered:velocity-api:3.3.0-SNAPSHOT"
 
+    shadow project(":common-chat")
     shadow project(":common-config")
     compileOnly project(":velocity-discord")
 
+    shadow libs.lettuce.core
     compileOnly libs.jda
     compileOnly libs.protobuf.java
 }

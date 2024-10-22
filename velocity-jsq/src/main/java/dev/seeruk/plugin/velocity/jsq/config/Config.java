@@ -7,10 +7,8 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Config {
-    public String redisUri;
-    public String redisChannel;
-
-    public String discordChannelId;
+    public RedisConfig redis;
+    public DiscordConfig discord;
 
     @JsonProperty("join")
     public MessageConfig onJoin;
@@ -20,6 +18,18 @@ public class Config {
 
     @JsonProperty("quit")
     public MessageConfig onQuit;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class RedisConfig {
+        public String uri;
+        public String channel;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class DiscordConfig {
+        public boolean enabled;
+        public String channelId;
+    }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class MessageConfig {

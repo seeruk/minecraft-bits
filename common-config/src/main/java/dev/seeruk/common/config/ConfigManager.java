@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import java.util.Optional;
@@ -15,11 +16,17 @@ public class ConfigManager {
     private final Path dataDir;
     private final Logger logger;
     private final Object plugMod;
+    private final String resourceDir;
 
     public ConfigManager(Path dataDir, Logger logger, Object plugMod) {
+        this(dataDir, logger, plugMod, "");
+    }
+
+    public ConfigManager(Path dataDir, Logger logger, Object plugMod, String resourceDir) {
         this.dataDir = dataDir;
         this.logger = logger;
         this.plugMod = plugMod;
+        this.resourceDir = resourceDir;
     }
 
     public <T> Optional<T> getConfigWithDefaults(Class<T> target) {
@@ -71,7 +78,8 @@ public class ConfigManager {
     }
 
     private InputStream getResource(String resourcePath) {
-        return plugMod.getClass().getClassLoader().getResourceAsStream(resourcePath);
+        var path = Paths.get(resourceDir, resourcePath);
+        return plugMod.getClass().getClassLoader().getResourceAsStream(path.toString());
     }
 
     private <T> T createInstance(Class<T> clazz) {

@@ -36,7 +36,7 @@ public class ChatMod extends Container implements DedicatedServerModInitializer 
 	public void onInitializeServer() {
 		instance = this;
 
-		var configManager = new ConfigManager(getConfigFolder(), LOGGER, this);
+		var configManager = new ConfigManager(getConfigFolder(), LOGGER, this, MOD_ID);
 		configManager.saveResource("config.dist.yml", true);
 
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {

@@ -54,7 +54,9 @@ public class ChatListener extends RedisPubSubAdapter<String, byte[]> {
         }
 
         server.executeSync(() -> {
-            var formatted = !event.getFormatted().isEmpty() ? TextUtils.deserialize(event.getFormatted()) : Text.empty();
+            var formatted = !event.getFormatted().isEmpty()
+                ? TextUtils.deserialize(event.getFormatted())
+                : Text.of(event.getMessage());
 
             server.getPlayerManager().getPlayerList().forEach(player ->
                 player.sendMessage(chatParser.parseNode(TextNode.convert(formatted)).toText())

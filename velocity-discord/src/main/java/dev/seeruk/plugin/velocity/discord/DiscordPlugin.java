@@ -11,6 +11,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import dev.seeruk.common.config.ConfigManager;
 import dev.seeruk.plugin.velocity.discord.command.PlayerListCommand;
 import dev.seeruk.plugin.velocity.discord.config.Config;
+import dev.seeruk.plugin.velocity.discord.event.DiscordBuildingEvent;
 import dev.seeruk.plugin.velocity.discord.event.DiscordReadyEvent;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -35,8 +36,11 @@ import java.util.Map;
 public class DiscordPlugin {
     private final Path dataDirectory;
     private final Logger logger;
-    private final JDA jda;
     private final ProxyServer server;
+
+    private Config config;
+    private JDABuilder jdaBuilder;
+    private JDA jda;
 
     private boolean isJDAReady;
 
@@ -53,25 +57,36 @@ public class DiscordPlugin {
         // Overwrite the dist config, so it's always up-to-date
         configManager.saveResource("config.dist.yml", true);
         // Fetch the user-defined config
-        var config = configManager.getConfigWithDefaults(Config.class).orElseThrow();
+        config = configManager.getConfigWithDefaults(Config.class).orElseThrow();
 
         this.dataDirectory = dataDirectory;
         this.logger = logger;
         this.server = server;
-
-        this.jda = JDABuilder.createDefault(config.discordToken)
-            .setEventManager(new AnnotatedEventManager())
-            .addEventListeners(this, new PlayerListCommand(this, server))
-            .build();
     }
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
+        this.jdaBuilder = JDABuilder.createDefault(config.discordToken)
+            .setEventManager(new AnnotatedEventManager())
+            .addEventListeners(this, new PlayerListCommand(this, server));
+
+        server.getEventManager().fire(new DiscordBuildingEvent()).thenAccept((evt) -> {
+            this.jda = jdaBuilder.build();
+        });
+
         logger.info("Initialised successfully");
     }
 
     public static DiscordPlugin getInstance() {
         return instance;
+    }
+
+    public JDABuilder getJdaBuilder() {
+        return jdaBuilder;
+    }
+
+    public void setJdaBuilder(JDABuilder jdaBuilder) {
+        this.jdaBuilder = jdaBuilder;
     }
 
     public Map<String, Instant> getPlayerConnectTimes() {

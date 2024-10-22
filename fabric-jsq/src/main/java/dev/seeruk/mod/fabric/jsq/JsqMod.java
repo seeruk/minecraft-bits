@@ -16,57 +16,58 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class JsqMod implements DedicatedServerModInitializer {
-	public static final String MOD_ID = "seers-jsq";
+    public static final String MOD_ID = "seers-jsq";
 
-	// This logger is used to write text to the console and the log file.
-	// It is considered best practice to use your mod id as the logger's name.
-	// That way, it's clear which mod wrote info, warnings, and errors.
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    // This logger is used to write text to the console and the log file.
+    // It is considered best practice to use your mod id as the logger's name.
+    // That way, it's clear which mod wrote info, warnings, and errors.
+    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	private ConfigManager configManager;
-	private RedisClient redisClient;
-	private StatefulRedisPubSubConnection<String, byte[]> redisConn;
-	private MinecraftServer server;
+    private ConfigManager configManager;
+    private RedisClient redisClient;
+    private StatefulRedisPubSubConnection<String, byte[]> redisConn;
+    private MinecraftServer server;
 
-	@Override
-	public void onInitializeServer() {
-		configManager = new ConfigManager(getConfigFolder(), LOGGER, this);
-		configManager.saveResource("config.dist.yml", true);
+    @Override
+    public void onInitializeServer() {
+        configManager = new ConfigManager(getConfigFolder(), LOGGER, this, MOD_ID);
+        configManager.saveResource("config.dist.yml", true);
 
-		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
-			this.server = server;
-			onServerReady();
-		});
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+            this.server = server;
+            onServerReady();
+        });
 
-		ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-			onServerStopping();
-		});
-	}
+        ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
+            onServerStopping();
+        });
+    }
 
-	private void onServerReady() {
-		var config = configManager.getConfigWithDefaults(Config.class).orElseThrow();
+    private void onServerReady() {
+        var config = configManager.getConfigWithDefaults(Config.class).orElseThrow();
 
-		// Connect to Redis
-		redisClient = RedisClient.create(config.redisUri);
-		redisConn = redisClient.connectPubSub(RedisCodec.of(StringCodec.UTF8, ByteArrayCodec.INSTANCE));
+        // Connect to Redis
+        redisClient = RedisClient.create(config.redisUri);
+        redisConn = redisClient.connectPubSub(RedisCodec.of(StringCodec.UTF8, ByteArrayCodec.INSTANCE));
 
-		// Listen for Redis messages
-		redisConn.addListener(new JsqListener(LOGGER, server, MiniMessage.miniMessage()));
-		redisConn.async().subscribe(config.redisChannel);
+        // Listen for Redis messages
+        redisConn.addListener(new JsqListener(LOGGER, server, MiniMessage.miniMessage()));
+        redisConn.async().subscribe(config.redisChannel);
 
-		LOGGER.info("Initialised, listening on Redis channel: {}", config.redisChannel);
-	}
+        LOGGER.info("Initialised, listening on Redis channel: {}", config.redisChannel);
+    }
 
-	private void onServerStopping() {
-		redisClient.close();
-		redisConn.close();
-		redisClient = null;
-		redisConn = null;
-	}
+    private void onServerStopping() {
+        redisClient.close();
+        redisConn.close();
+        redisClient = null;
+        redisConn = null;
+    }
 
-	private Path getConfigFolder() {
-		return FabricLoader.getInstance().getConfigDir().resolve(MOD_ID);
-	}
+    private Path getConfigFolder() {
+        return FabricLoader.getInstance().getConfigDir().resolve(MOD_ID);
+    }
 }

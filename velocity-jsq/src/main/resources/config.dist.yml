@@ -1,7 +1,10 @@
-redisUri: redis://localhost:6379
-redisChannel: seers-jsq:main
+redis:
+  uri: redis://localhost:6379
+  channel: seers-jsq:main
 
-discordChannelId: changeme
+discord:
+  enabled: false
+  channelId: changeme
 
 join:
   chat:

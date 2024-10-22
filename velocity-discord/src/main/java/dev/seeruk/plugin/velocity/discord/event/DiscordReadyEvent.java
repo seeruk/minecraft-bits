@@ -10,6 +10,6 @@ public class DiscordReadyEvent {
     }
 
     public JDA jda() {
-        return this.jda;
+        return jda;
     }
 }

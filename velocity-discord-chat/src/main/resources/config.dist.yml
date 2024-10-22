@@ -1,1 +1,21 @@
-discordToken: changeme
+redis:
+  uri: redis://localhost:6379
+  channel: seers-chat:main
+
+discord:
+  channelId: changeme
+
+formats:
+  chat:
+    format: "**{display_name}** » {message}"
+
+  emote:
+    format: "_ \\* {display_name} {message}_"
+
+  advancement:
+    # Currently we don't customise these messages, so only colour is configurable
+    colour: "#FFAA00"
+
+  death:
+    # Currently we don't customise these messages, so only colour is configurable
+    colour: "#000000"

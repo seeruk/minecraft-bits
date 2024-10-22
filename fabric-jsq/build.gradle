@@ -31,11 +31,12 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	modImplementation libs.adventure.fabric
 	modImplementation libs.fabric.placeholder.api
+	modImplementation libs.adventure.fabric
+	include libs.adventure.fabric
 
-	shadow project(":common-jsq")
 	shadow project(":common-config")
+	shadow project(":common-jsq")
 
 	shadow libs.lettuce.core
 	shadow libs.protobuf.java

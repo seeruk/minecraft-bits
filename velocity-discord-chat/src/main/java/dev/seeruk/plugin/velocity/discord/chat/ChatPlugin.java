@@ -7,8 +7,17 @@ import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
+import dev.seeruk.common.chat.ChatEvent;
+import dev.seeruk.common.chat.ChatEventType;
+import dev.seeruk.common.config.ConfigManager;
+import dev.seeruk.plugin.velocity.discord.DiscordPlugin;
+import dev.seeruk.plugin.velocity.discord.chat.config.Config;
+import dev.seeruk.plugin.velocity.discord.chat.message.ChatListener;
+import dev.seeruk.plugin.velocity.discord.event.DiscordBuildingEvent;
 import dev.seeruk.plugin.velocity.discord.event.DiscordReadyEvent;
-import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.SubscribeEvent;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
@@ -22,26 +31,85 @@ import java.nio.file.Path;
         @Dependency(id = "seers-discord")
     }
 )
-public class ChatPlugin {
-    private final Path dataDirectory;
-    private final Logger logger;
-    private final ProxyServer server;
-    private JDA jda;
+public class ChatPlugin extends Container {
 
     @Inject
     public ChatPlugin(@DataDirectory Path dataDirectory, Logger logger, ProxyServer server) {
-        this.dataDirectory = dataDirectory;
-        this.logger = logger;
-        this.server = server;
+        setDataDirectory(dataDirectory);
+        setLogger(logger);
+        setServer(server);
     }
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        logger.info("Initialised successfully");
+        var configManager = new ConfigManager(getDataDirectory(), getLogger(), this);
+        // Overwrite the dist config, so it's always up-to-date
+        configManager.saveResource("config.dist.yml", true);
+        // Fetch the user-defined config
+        setConfig(configManager.getConfigWithDefaults(Config.class).orElseThrow());
+
+        getLogger().info("Initialised successfully");
+    }
+
+    @Subscribe
+    private void onDiscordBuilding(DiscordBuildingEvent event) {
+        getLogger().info("Set up Discord stuff");
+
+        var plugin = DiscordPlugin.getInstance();
+        var builder = plugin.getJdaBuilder()
+            .enableIntents(GatewayIntent.MESSAGE_CONTENT)
+            .addEventListeners(this);
+
+        plugin.setJdaBuilder(builder);
     }
 
     @Subscribe
     private void onDiscordReady(DiscordReadyEvent event) {
-        this.jda = event.jda();
+        setJda(event.jda());
+
+        var listener = new ChatListener(
+            getJda(),
+            getLogger(),
+            getConfig().discord.channelId,
+            getConfig().formats
+        );
+
+        getJda().addEventListener(this);
+
+        getRedisConn().addListener(listener);
+        getRedisConn().async().subscribe(getConfig().redis.channel);
+
+        getLogger().info("Discord is ready");
+    }
+
+    @SubscribeEvent
+    private void onMessageReceived(MessageReceivedEvent event) {
+        if (!event.getMessage().getChannelId().equals(getConfig().discord.channelId)) {
+            // Ignore messages from channels we don't care a bout
+            return;
+        }
+
+        var content = event.getMessage().getContentDisplay();
+        if (content.isEmpty()) {
+            // Don't care about empty messages
+            return;
+        }
+
+        if (event.getAuthor().isBot()) {
+            // Ignore all bots, including ourselves
+            return;
+        }
+
+        var proto = ChatEvent.newBuilder()
+            .setType(ChatEventType.Discord)
+            .setPlayerName(event.getAuthor().getEffectiveName())
+            .setMessage(String.format(
+                "<blue>Discord ›</blue> %s <gray>»</gray> %s",
+                event.getAuthor().getEffectiveName(),
+                event.getMessage().getContentDisplay()
+            ))
+            .build();
+
+        getRedisConn().async().publish(getConfig().redis.channel, proto.toByteArray());
     }
 }

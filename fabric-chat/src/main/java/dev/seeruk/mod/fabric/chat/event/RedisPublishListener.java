@@ -6,7 +6,6 @@ import dev.seeruk.mod.fabric.chat.config.Config;
 import dev.seeruk.mod.fabric.chat.text.TextUtils;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 import lombok.RequiredArgsConstructor;
-import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 @RequiredArgsConstructor
@@ -15,11 +14,31 @@ public class RedisPublishListener {
     private final StatefulRedisPubSubConnection<String, byte[]> redisConn;
 
     public void register() {
+        AdvancementMessageSendCallback.EVENT.register((player, message) -> {
+            var proto = chatEventBuilder(player)
+                .setType(ChatEventType.Advancement)
+                .setFormatted(TextUtils.serialize(message))
+                .setMessage(message.getString())
+                .build();
+
+            sendChatEvent(proto);
+        });
+
         ChatMessageSendCallback.EVENT.register((player, formatted, message) -> {
             var proto = chatEventBuilder(player)
                 .setType(ChatEventType.Chat)
                 .setFormatted(TextUtils.serialize(formatted))
-                .setMessage(TextUtils.serialize(message))
+                .setMessage(message.getString())
+                .build();
+
+            sendChatEvent(proto);
+        });
+
+        DeathMessageSendCallback.EVENT.register((player, message) -> {
+            var proto = chatEventBuilder(player)
+                .setType(ChatEventType.Death)
+                .setFormatted(TextUtils.serialize(message))
+                .setMessage(message.getString())
                 .build();
 
             sendChatEvent(proto);
@@ -29,19 +48,7 @@ public class RedisPublishListener {
             var proto = chatEventBuilder(player)
                 .setType(ChatEventType.Emote)
                 .setFormatted(TextUtils.serialize(formatted))
-                .setMessage(TextUtils.serialize(message))
-                .build();
-
-            sendChatEvent(proto);
-        });
-
-        ServerMessageEvents.GAME_MESSAGE.register((server, message, overlay) -> {
-            var encodedMessage = TextUtils.serialize(message);
-
-            var proto = chatEventBuilder()
-                .setType(ChatEventType.Game)
-                .setFormatted(encodedMessage) // TODO: Maybe if no formatted is set, could fall back to message?
-                .setMessage(encodedMessage)
+                .setMessage(message.getString())
                 .build();
 
             sendChatEvent(proto);

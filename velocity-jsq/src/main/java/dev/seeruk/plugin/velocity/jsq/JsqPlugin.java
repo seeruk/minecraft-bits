@@ -60,7 +60,7 @@ public class JsqPlugin {
         // Fetch the user-defined config
         config = configManager.getConfigWithDefaults(Config.class).orElseThrow();
 
-        this.redisConn = RedisClient.create(config.redisUri)
+        this.redisConn = RedisClient.create(config.redis.uri)
             .connectPubSub(RedisCodec.of(StringCodec.UTF8, ByteArrayCodec.INSTANCE))
             .async();
 
@@ -117,11 +117,11 @@ public class JsqPlugin {
             .setPlayerName(player.getUsername())
             .build();
 
-        this.redisConn.publish(config.redisChannel, protoEvent.toByteArray());
+        this.redisConn.publish(config.redis.channel, protoEvent.toByteArray());
 
-        if (server.getPluginManager().isLoaded("seers-discord")) {
+        if (config.discord.enabled && server.getPluginManager().isLoaded("seers-discord")) {
             DiscordContainer.getJda().ifPresent(jda -> {
-                var messenger = new DiscordMessenger(jda, config.discordChannelId);
+                var messenger = new DiscordMessenger(jda, config.discord.channelId);
                 messenger.sendMessageEmbed(player, discordMessage, ColorUtil.getColorByName(messageConfig.discord.colour));
             });
         }

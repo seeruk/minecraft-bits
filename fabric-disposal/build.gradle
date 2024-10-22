@@ -55,3 +55,7 @@ processResources {
 		expand "version": project.version
 	}
 }
+
+remapJar {
+	archiveClassifier = ""
+}
