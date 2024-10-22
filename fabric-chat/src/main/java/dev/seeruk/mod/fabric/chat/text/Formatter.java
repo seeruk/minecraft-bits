@@ -1,5 +1,6 @@
 package dev.seeruk.mod.fabric.chat.text;
 
+import dev.seeruk.mod.fabric.chat.text.replacer.TagMarkdownReplacer;
 import dev.seeruk.mod.fabric.chat.text.tag.CommandTag;
 import dev.seeruk.mod.fabric.chat.text.tag.ItemTag;
 import dev.seeruk.mod.fabric.chat.text.tag.LinkTag;

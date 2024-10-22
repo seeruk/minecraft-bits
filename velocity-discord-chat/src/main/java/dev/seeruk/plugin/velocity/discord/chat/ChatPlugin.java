@@ -18,8 +18,6 @@ import dev.seeruk.plugin.velocity.discord.event.DiscordReadyEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.Component;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
@@ -28,6 +26,7 @@ import java.nio.file.Path;
     id = "seers-discord-chat",
     name = "Seer's Velocity Discord Chat",
     description = "Forwards messages from Seer's Chat to Discord, and vice versa",
+    authors = {"SeerUK"},
     version = BuildConstants.VERSION,
     dependencies = {
         @Dependency(id = "seers-discord")
@@ -55,8 +54,6 @@ public class ChatPlugin extends Container {
 
     @Subscribe
     private void onDiscordBuilding(DiscordBuildingEvent event) {
-        getLogger().info("Set up Discord stuff");
-
         var plugin = DiscordPlugin.getInstance();
         var builder = plugin.getJdaBuilder()
             .enableIntents(GatewayIntent.MESSAGE_CONTENT)
@@ -80,8 +77,6 @@ public class ChatPlugin extends Container {
 
         getRedisConn().addListener(listener);
         getRedisConn().async().subscribe(getConfig().redis.channel);
-
-        getLogger().info("Discord is ready");
     }
 
     @SubscribeEvent

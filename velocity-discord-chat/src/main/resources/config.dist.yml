@@ -13,9 +13,19 @@ formats:
     format: "_ \\* {display_name} {message}_"
 
   advancement:
-    # Currently we don't customise these messages, so only colour is configurable
     colour: "#FFAA00"
+    # This message is currently delivered in full
+    format: "{message}"
 
   death:
-    # Currently we don't customise these messages, so only colour is configurable
-    colour: "#000000"
+    colour: black
+    # This message is currently delivered in full
+    format: "{message}"
+
+  serverStarted:
+    colour: green
+    format: "🟢  {server_capitalised} server has started"
+
+  serverStopping:
+    colour: red
+    format: "🔴  {server_capitalised} server is stopping"

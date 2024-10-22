@@ -32,14 +32,14 @@ public class ItemTag {
                 .or(() -> getEquipmentSlot(player, slot))
                 .orElseThrow(() -> ctx.newException("Invalid slot")));
         } else {
-            component = TextUtils.textAsComponent(getItemText(getMainhandSlot(player)));
+            component = TextUtils.textAsComponent(getItemText(getMainHandSlot(player)));
         }
 
         // Finally, return the tag instance to insert the placeholder!
         return Tag.selfClosingInserting(component);
     }
 
-    private static ItemStack getMainhandSlot(ServerPlayerEntity player) {
+    private static ItemStack getMainHandSlot(ServerPlayerEntity player) {
         return player.getInventory().getMainHandStack();
     }
 
@@ -92,6 +92,9 @@ public class ItemTag {
             return mutableText;
         }
 
-        return Text.empty().append(ItemStack.EMPTY.getName());
+        return Text.empty()
+            .append("[")
+            .append(ItemStack.EMPTY.getName())
+            .append("]");
     }
 }

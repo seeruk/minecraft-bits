@@ -12,6 +12,8 @@ enum ChatEventType {
   Death = 2;
   Discord = 3;
   Emote = 4;
+  ServerStarted = 5;
+  ServerStopping = 6;
 }
 
 message ChatEvent {

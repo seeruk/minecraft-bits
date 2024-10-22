@@ -10,6 +10,7 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
+import dev.seeruk.common.config.ColorUtil;
 import dev.seeruk.common.config.ConfigManager;
 import dev.seeruk.common.jsq.JsqEvent;
 import dev.seeruk.plugin.velocity.jsq.config.Config;
@@ -31,6 +32,7 @@ import java.util.Random;
     id = "seers-jsq",
     name = "Seer's Velocity Join, Switch, Quit",
     description = "Adds network-wide join/switch/quit messages to your server so players know what's going on",
+    authors = {"SeerUK"},
     version = BuildConstants.VERSION,
     dependencies = {
         @Dependency(id = "seers-discord", optional = true)

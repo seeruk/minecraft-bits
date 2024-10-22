@@ -27,7 +27,7 @@ public abstract class Container {
     private RedisClient redisClient;
     private StatefulRedisPubSubConnection<String, byte[]> redisConn;
 
-    public RedisPublishListener getChatMessageSendListener() {
+    public RedisPublishListener getRedisPublishListener() {
         return new RedisPublishListener(config, getRedisConn());
     }
 

@@ -1,0 +1,8 @@
+# List any groups below that you'd like users to be able to manage in-game themselves.
+#
+# These groups must exist in LuckPerms. The name used is _not_ the display name, it's the group
+# name you'd use in a permission node, like `group.teleporter`.
+groups:
+- botter
+- grave
+- teleporter

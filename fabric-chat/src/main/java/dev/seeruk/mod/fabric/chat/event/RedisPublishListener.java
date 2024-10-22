@@ -4,9 +4,12 @@ import dev.seeruk.common.chat.ChatEvent;
 import dev.seeruk.common.chat.ChatEventType;
 import dev.seeruk.mod.fabric.chat.config.Config;
 import dev.seeruk.mod.fabric.chat.text.TextUtils;
+import io.lettuce.core.RedisFuture;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.server.network.ServerPlayerEntity;
+
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 public class RedisPublishListener {
@@ -55,8 +58,29 @@ public class RedisPublishListener {
         });
     }
 
-    private void sendChatEvent(ChatEvent event) {
-        redisConn.async().publish(config.redisChannel, event.toByteArray());
+    public void onStarted() {
+        var proto = chatEventBuilder()
+            .setType(ChatEventType.ServerStarted)
+            .build();
+
+        sendChatEvent(proto);
+    }
+
+    public void onStopping() {
+        var proto = chatEventBuilder()
+            .setType(ChatEventType.ServerStopping)
+            .build();
+
+        try {
+            sendChatEvent(proto).await(5L, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            // Well, we tried...
+            // TODO: Log maybe?
+        }
+    }
+
+    private RedisFuture<Long> sendChatEvent(ChatEvent event) {
+        return redisConn.async().publish(config.redisChannel, event.toByteArray());
     }
 
     private ChatEvent.Builder chatEventBuilder() {

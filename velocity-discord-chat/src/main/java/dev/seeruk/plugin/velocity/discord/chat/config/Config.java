@@ -24,6 +24,8 @@ public class Config {
         public MessageFormatConfig emote;
         public MessageEmbedFormatConfig advancement;
         public MessageEmbedFormatConfig death;
+        public MessageEmbedFormatConfig serverStarted;
+        public MessageEmbedFormatConfig serverStopping;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -32,7 +34,7 @@ public class Config {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class MessageEmbedFormatConfig {
+    public static class MessageEmbedFormatConfig extends MessageFormatConfig {
         public String colour;
     }
 }

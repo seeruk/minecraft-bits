@@ -2,6 +2,7 @@ package dev.seeruk.mod.fabric.chat.message;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import dev.seeruk.common.chat.ChatEvent;
+import dev.seeruk.common.chat.ChatEventType;
 import dev.seeruk.mod.fabric.chat.config.Config;
 import dev.seeruk.mod.fabric.chat.text.TextUtils;
 import io.lettuce.core.pubsub.RedisPubSubAdapter;
@@ -46,6 +47,11 @@ public class ChatListener extends RedisPubSubAdapter<String, byte[]> {
         } catch (InvalidProtocolBufferException e) {
             logger.warn("failed to parse chat event proto message", e);
             return;
+        }
+
+        // TODO: Maybe a flag on the event to control this?
+        if (event.getType() == ChatEventType.ServerStarted || event.getType() == ChatEventType.ServerStopping) {
+            return; // Skip non-chat events
         }
 
         if (config.server.equals(event.getServer())) {

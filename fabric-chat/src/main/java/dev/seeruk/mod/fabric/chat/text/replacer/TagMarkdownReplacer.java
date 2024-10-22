@@ -1,4 +1,4 @@
-package dev.seeruk.mod.fabric.chat.text;
+package dev.seeruk.mod.fabric.chat.text.replacer;
 
 import java.util.List;
 import java.util.Map;

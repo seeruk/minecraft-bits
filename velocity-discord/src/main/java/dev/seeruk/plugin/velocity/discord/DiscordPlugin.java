@@ -31,6 +31,7 @@ import java.util.Map;
     id = "seers-discord",
     name = "Seer's Velocity Discord",
     description = "Provides access to JDA, connects a bot, and shows server status",
+    authors = {"SeerUK"},
     version = BuildConstants.VERSION
 )
 public class DiscordPlugin {

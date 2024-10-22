@@ -1,4 +1,4 @@
-package dev.seeruk.plugin.velocity.jsq;
+package dev.seeruk.common.config;
 
 import java.awt.*;
 import java.util.Map;
@@ -23,6 +23,9 @@ public class ColorUtil {
     );
 
     public static Color getColorByName(String name) {
-        return colours.getOrDefault(name, Color.black);
+        if (colours.containsKey(name)) {
+            return colours.get(name);
+        }
+        return Color.decode(name);
     }
 }

@@ -58,12 +58,15 @@ public class ChatMod extends Container implements DedicatedServerModInitializer 
 		getRedisConn().addListener(new ChatListener(getAdventure(), getConfig(), LOGGER, getServer()));
 		getRedisConn().async().subscribe(config.redisChannel);
 
-		getChatMessageSendListener().register();
+		getRedisPublishListener().register();
+		getRedisPublishListener().onStarted();
 
 		LOGGER.info("Initialised, listening on Redis channel: {}", config.redisChannel);
 	}
 
 	private void onServerStopping() {
+		getRedisPublishListener().onStopping();
+
 		getRedisClient().close();
 		getRedisConn().close();
 

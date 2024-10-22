@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"id": "seers-group-toggle",
+	"version": "${version}",
+	"name": "Seer's Group Toggle",
+	"description": "A simple mod to allow users to toggle enabled features via LuckPerms groups.",
+	"authors": [
+		"seeruk"
+	],
+	"contact": {
+		"homepage": "https://github.com/seeruk/fabric-mods",
+		"sources": "https://github.com/seeruk/fabric-mods"
+	},
+	"license": "MIT",
+	"icon": "assets/seers-group-toggle/icon.png",
+	"environment": "server",
+	"entrypoints": {
+		"main": [
+			"dev.seeruk.mod.fabric.grouptoggle.GroupToggleMod"
+		]
+	},
+	"mixins": [],
+	"depends": {
+		"fabricloader": ">=0.16.2",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {}
+}

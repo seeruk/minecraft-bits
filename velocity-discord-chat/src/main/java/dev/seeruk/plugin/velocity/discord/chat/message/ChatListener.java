@@ -2,6 +2,7 @@ package dev.seeruk.plugin.velocity.discord.chat.message;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import dev.seeruk.common.chat.ChatEvent;
+import dev.seeruk.common.config.ColorUtil;
 import dev.seeruk.plugin.velocity.discord.chat.config.Config;
 import io.lettuce.core.pubsub.RedisPubSubAdapter;
 import lombok.RequiredArgsConstructor;
@@ -43,21 +44,24 @@ public class ChatListener extends RedisPubSubAdapter<String, byte[]> {
         }
 
         switch (event.getType()) {
-            case Advancement -> textChannel.sendMessageEmbeds(formatAdvancement(event))
-                .setSuppressEmbeds(true).queue();
+            case Advancement -> textChannel.sendMessageEmbeds(formatAdvancement(event)).queue();
             case Chat -> textChannel.sendMessage(formatChat(event))
                 .setSuppressEmbeds(true).queue();
-            case Death -> textChannel.sendMessageEmbeds(formatDeath(event))
-                .setSuppressEmbeds(true).queue();
+            case Death -> textChannel.sendMessageEmbeds(formatDeath(event)).queue();
             case Discord -> {} // We don't send messages from Discord to Discord...
             case Emote -> textChannel.sendMessage(formatEmote(event))
                 .setSuppressEmbeds(true).queue();
+            case ServerStarted -> textChannel.sendMessageEmbeds(formatServerStarted(event)).queue();
+            case ServerStopping -> textChannel.sendMessageEmbeds(formatServerStopping(event)).queue();
             default -> logger.warn("Unrecognised event received");
         }
     }
 
     private MessageEmbed formatAdvancement(ChatEvent event) {
-        return formatPlayerEmbed(event.getPlayerUuid(), event.getMessage(), Color.decode(config.advancement.colour));
+        var message = config.advancement.format
+            .replace("{message}", event.getMessage());
+
+        return formatPlayerEmbed(event.getPlayerUuid(), message, ColorUtil.getColorByName(config.advancement.colour));
     }
 
     private String formatChat(ChatEvent event) {
@@ -67,13 +71,42 @@ public class ChatListener extends RedisPubSubAdapter<String, byte[]> {
     }
 
     private MessageEmbed formatDeath(ChatEvent event) {
-        return formatPlayerEmbed(event.getPlayerUuid(), event.getMessage(), Color.decode(config.death.colour));
+        var message = config.death.format
+            .replace("{message}", event.getMessage());
+
+        return formatPlayerEmbed(event.getPlayerUuid(), message, ColorUtil.getColorByName(config.death.colour));
     }
 
     private String formatEmote(ChatEvent event) {
         return config.emote.format
             .replace("{display_name}", event.getPlayerName()) // TODO: Actual display name?
             .replace("{message}", event.getMessage());
+    }
+
+    private MessageEmbed formatServerStarted(ChatEvent event) {
+        var message = config.serverStarted.format
+            .replace("{server}", event.getServer())
+            .replace("{server_capitalised}", capitalise(event.getServer()));
+
+        var embed = new EmbedBuilder();
+
+        embed.setColor(ColorUtil.getColorByName(config.serverStarted.colour));
+        embed.setAuthor(message);
+
+        return embed.build();
+    }
+
+    private MessageEmbed formatServerStopping(ChatEvent event) {
+        var message = config.serverStopping.format
+            .replace("{server}", event.getServer())
+            .replace("{server_capitalised}", capitalise(event.getServer()));
+
+        var embed = new EmbedBuilder();
+
+        embed.setColor(ColorUtil.getColorByName(config.serverStopping.colour));
+        embed.setAuthor(message);
+
+        return embed.build();
     }
 
     private MessageEmbed formatPlayerEmbed(String playerUuid, String message, Color color) {
@@ -90,5 +123,13 @@ public class ChatListener extends RedisPubSubAdapter<String, byte[]> {
         );
 
         return embed.build();
+    }
+
+    private String capitalise(String str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
+        return Character.toTitleCase(str.charAt(0)) +
+            str.substring(1);
     }
 }

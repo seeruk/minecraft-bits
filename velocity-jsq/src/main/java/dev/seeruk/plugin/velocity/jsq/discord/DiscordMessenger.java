@@ -16,6 +16,9 @@ public class DiscordMessenger {
     private final JDA jda;
     private final String channelId;
 
+    private static final ComponentSerializer<Component, Component, String> deserializer =
+        MiniMessage.miniMessage();
+
     private static final ComponentSerializer<Component, TextComponent, String> serializer =
         PlainTextComponentSerializer.plainText();
 
@@ -26,7 +29,7 @@ public class DiscordMessenger {
 
     public void sendMessageEmbed(Player player, String message, Color color) {
         var embed = new EmbedBuilder();
-        var component = MiniMessage.miniMessage().deserialize(message);
+        var component = deserializer.deserialize(message);
 
         message = serializer.serialize(component);
 
