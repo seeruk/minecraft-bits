@@ -90,6 +90,10 @@ public class DiscordPlugin {
         this.jdaBuilder = jdaBuilder;
     }
 
+    public JDA getJda() {
+        return jda;
+    }
+
     public Map<String, Instant> getPlayerConnectTimes() {
         return playerConnectTimes;
     }

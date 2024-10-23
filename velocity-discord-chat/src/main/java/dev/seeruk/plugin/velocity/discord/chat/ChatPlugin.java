@@ -18,6 +18,8 @@ import dev.seeruk.plugin.velocity.discord.event.DiscordReadyEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
@@ -33,6 +35,10 @@ import java.nio.file.Path;
     }
 )
 public class ChatPlugin extends Container {
+
+    private static final MiniMessage miniMessage = MiniMessage.miniMessage();
+
+    private static final GsonComponentSerializer componentSerializer = GsonComponentSerializer.gson();
 
     @Inject
     public ChatPlugin(@DataDirectory Path dataDirectory, Logger logger, ProxyServer server) {
@@ -81,6 +87,7 @@ public class ChatPlugin extends Container {
 
     @SubscribeEvent
     private void onMessageReceived(MessageReceivedEvent event) {
+        // TODO: Move all of this out of here!?
         if (!event.getMessage().getChannelId().equals(getConfig().discord.channelId)) {
             // Ignore messages from channels we don't care a bout
             return;
@@ -97,14 +104,16 @@ public class ChatPlugin extends Container {
             return;
         }
 
+        var component = miniMessage.deserialize(String.format(
+            "<blue>Discord ›</blue> %s <gray>»</gray> %s",
+            event.getAuthor().getEffectiveName(),
+            event.getMessage().getContentDisplay()
+        ));
+
         var proto = ChatEvent.newBuilder()
             .setType(ChatEventType.Discord)
             .setPlayerName(event.getAuthor().getEffectiveName())
-            .setMessage(String.format(
-                "<blue>Discord ›</blue> %s <gray>»</gray> %s",
-                event.getAuthor().getEffectiveName(),
-                event.getMessage().getContentDisplay()
-            ))
+            .setFormatted(componentSerializer.serialize(component))
             .build();
 
         getRedisConn().async().publish(getConfig().redis.channel, proto.toByteArray());

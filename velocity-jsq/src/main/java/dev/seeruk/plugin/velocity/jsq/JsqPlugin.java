@@ -15,7 +15,6 @@ import dev.seeruk.common.config.ConfigManager;
 import dev.seeruk.common.jsq.JsqEvent;
 import dev.seeruk.plugin.velocity.jsq.config.Config;
 import dev.seeruk.plugin.velocity.jsq.discord.DiscordContainer;
-import dev.seeruk.plugin.velocity.jsq.discord.DiscordListener;
 import dev.seeruk.plugin.velocity.jsq.discord.DiscordMessenger;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.codec.ByteArrayCodec;
@@ -65,10 +64,6 @@ public class JsqPlugin {
         this.redisConn = RedisClient.create(config.redis.uri)
             .connectPubSub(RedisCodec.of(StringCodec.UTF8, ByteArrayCodec.INSTANCE))
             .async();
-
-        if (server.getPluginManager().isLoaded("seers-discord")) {
-            server.getEventManager().register(this, new DiscordListener());
-        }
 
         logger.info("Initialised successfully");
     }
