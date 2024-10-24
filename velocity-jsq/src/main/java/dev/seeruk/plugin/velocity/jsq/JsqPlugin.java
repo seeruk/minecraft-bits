@@ -24,6 +24,7 @@ import io.lettuce.core.pubsub.api.async.RedisPubSubAsyncCommands;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -65,6 +66,8 @@ public class JsqPlugin {
         configManager.saveResource("config.dist.yml", true);
         // Fetch the user-defined config
         config = configManager.getConfigWithDefaults(Config.class).orElseThrow();
+
+        connectedPlayers = new HashSet<>();
 
         this.redisConn = RedisClient.create(config.redis.uri)
             .connectPubSub(RedisCodec.of(StringCodec.UTF8, ByteArrayCodec.INSTANCE))
