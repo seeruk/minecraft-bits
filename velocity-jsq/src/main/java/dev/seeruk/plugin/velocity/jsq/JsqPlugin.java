@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 @Plugin(
     id = "seers-jsq",
@@ -45,6 +46,10 @@ public class JsqPlugin {
 
     private Config config;
     private RedisPubSubAsyncCommands<String, byte[]> redisConn;
+
+    // We try to keep track of players that have connected, according to this plugin, so we don't
+    // notify about disconnects if we never sent a connection message!
+    private Set<String> connectedPlayers;
 
     @Inject
     public JsqPlugin(@DataDirectory Path dataDirectory, Logger logger, ProxyServer server) {
@@ -71,6 +76,9 @@ public class JsqPlugin {
     @Subscribe
     public void onServerConnected(ServerConnectedEvent event) {
         var player = event.getPlayer();
+
+        connectedPlayers.add(player.getUsername());
+
         var nextServer = event.getServer();
         var previousServer = event.getPreviousServer();
 
@@ -90,6 +98,12 @@ public class JsqPlugin {
     @Subscribe
     public void onDisconnect(DisconnectEvent event) {
         var player = event.getPlayer();
+
+        if (!connectedPlayers.contains(player.getUsername())) {
+            return;
+        }
+
+        connectedPlayers.remove(player.getUsername());
 
         var placeholders = new Placeholders(
             player.getUsername(),
