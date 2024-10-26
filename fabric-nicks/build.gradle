@@ -2,6 +2,7 @@ plugins {
 	id "fabric-loom" version "1.7-SNAPSHOT"
 	id "maven-publish"
 	id "com.gradleup.shadow" version "8.3.3"
+	id "com.google.protobuf" version "0.9.4"
 }
 
 version = project.mod_version
@@ -75,6 +76,9 @@ processResources {
 
 shadowJar {
 	configurations = [project.configurations.shadow]
+
+	// Can we just enable this on a "release" build or something?
+	//enableRelocation = true
 
 	// For Flyway:
 	mergeServiceFiles()

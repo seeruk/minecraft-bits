@@ -1,14 +1,8 @@
-server: changeme
+database:
+  url: jdbc:mysql://localhost/seers_nicks
+  username: seers_nicks
+  password: changeme
 
-redisUri: redis://localhost:6379
-redisChannel: seers-chat:main
-
-# Formatting available: Placeholders, Legacy, Tags
-# Do not use placeholders which include player's display name, e.g. %player:displayname%
-displayNameFormat: "%player:name%"
-
-# Formatting available: Placeholders, Legacy, Markdown Lite, Tags
-chatFormat: "%player:displayname% <gray>»</gray> {text}"
-
-# Formatting available: Placeholders, Legacy, Markdown Lite, Tags
-emoteFormat: "<gray><italic>* %player:displayname% {text}</italic></gray>"
+redis:
+  uri: redis://localhost:6379
+  channel: seers-nicks:main

@@ -13,6 +13,7 @@ import org.slf4j.Logger;
  * pub/sub channel. Messages are formatted using the given component serializer.
  */
 public class JsqListener extends RedisPubSubAdapter<String, byte[]> {
+
     private final Logger logger;
     private final MinecraftServer server;
     private final ComponentSerializer<Component, Component, String> serializer;

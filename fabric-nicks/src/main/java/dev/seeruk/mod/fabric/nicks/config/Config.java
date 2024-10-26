@@ -4,15 +4,20 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Config {
-    // TODO: Database bits.
 
-    /**
-     * The Redis connection string, used by Lettuce.
-     */
-    public String redisUri;
+    public DatabaseConfig database;
+    public RedisConfig redis;
 
-    /**
-     * The name of a Redis channel to listen for chat messages on.
-     */
-    public String redisChannel;
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class DatabaseConfig {
+        public String url;
+        public String username;
+        public String password;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class RedisConfig {
+        public String uri;
+        public String channel;
+    }
 }

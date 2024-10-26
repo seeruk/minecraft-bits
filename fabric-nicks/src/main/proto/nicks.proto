@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package nicks;
+
+option java_multiple_files = true;
+option java_package = "dev.seeruk.mod.fabric.nicks";
+option java_outer_classname = "NicksProto";
+
+message NicksEvent {
+  string server = 1;
+}

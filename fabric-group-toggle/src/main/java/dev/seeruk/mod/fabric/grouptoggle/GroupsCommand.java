@@ -41,7 +41,7 @@ public class GroupsCommand {
             return 0;
         }
 
-        ServerPlayerEntity player = source.getPlayer();
+        var player = source.getPlayer();
 
         var mod = GroupToggleMod.getInstance();
         var luckPerms = LuckPermsProvider.get();
