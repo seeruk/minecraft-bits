@@ -2,6 +2,8 @@
 adventure = "4.17.0"
 adventure-fabric = "5.14.1"
 fabric-placeholder-api = "2.4.1+1.21"
+flyway = "10.20.1"
+hikari = "6.0.0"
 jackson = "2.18.0"
 jda = "5.1.2"
 junit-jupiter = "5.10.3"
@@ -9,6 +11,7 @@ lettuce = "6.3.2.RELEASE"
 log4j = "2.22.1"
 lombok = "1.18.34"
 luckperms = "5.4"
+mysql = "8.4.0"
 protobuf-java = "4.28.2"
 
 [libraries]
@@ -16,6 +19,9 @@ adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure" 
 adventure-text-serializer-legacy = { module = "net.kyori:adventure-text-serializer-legacy", version.ref = "adventure" }
 adventure-fabric = { module = "net.kyori:adventure-platform-fabric", version.ref = "adventure-fabric" }
 fabric-placeholder-api = { module = "eu.pb4:placeholder-api", version.ref = "fabric-placeholder-api" }
+flyway = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
+flyway-mysql = { module = "org.flywaydb:flyway-mysql", version.ref = "flyway" }
+hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
 jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
@@ -28,4 +34,5 @@ log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "lo
 log4j-slf4j2-impl = { module = "org.apache.logging.log4j:log4j-slf4j2-impl", version.ref = "log4j" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 luckperms = { module = "net.luckperms:api", version.ref = "luckperms" }
+mysql = { module = "com.mysql:mysql-connector-j", version.ref = "mysql" }
 protobuf-java = { module = "com.google.protobuf:protobuf-java", version.ref = "protobuf-java" }

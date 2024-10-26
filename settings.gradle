@@ -20,6 +20,7 @@ include(
     "fabric-disposal",
     "fabric-group-toggle",
     "fabric-jsq",
+    "fabric-nicks",
     "fabric-propswap",
     "velocity-discord",
     "velocity-discord-chat",
