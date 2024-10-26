@@ -5,8 +5,8 @@ have several servers and your players want their nickname to apply on all of the
 
 **Features:**
 
-* Nickname as a placeholder in [Text Placeholder API](https://modrinth.com/mod/placeholder-api)
-* Nickname optionally available as a player display name override
+* Nickname available as a placeholder in [Text Placeholder API](https://modrinth.com/mod/placeholder-api)
+* Nickname available as a player display name override
 * Name colour setting
 
 **Solution:**
@@ -14,4 +14,4 @@ have several servers and your players want their nickname to apply on all of the
 * Nicknames and colours are stored in MySQL
 * Nickname updates are propagated via Redis pub/sub, so that each server can re-fetch an in-memory
 cache of all nicknames
-* Commands that interact with the database have a cooldown, also set in Redis
+* Commands that interact with the database have a very short cooldown, per server
