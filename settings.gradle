@@ -13,17 +13,12 @@ pluginManagement {
 rootProject.name = "minecraft-bits"
 
 include(
-    "common-chat",
     "common-config",
-    "common-jsq",
     "fabric-chat",
     "fabric-discord",
     "fabric-disposal",
     "fabric-group-toggle",
-    "fabric-jsq",
+    "fabric-jq",
     "fabric-nicks",
     "fabric-propswap",
-    "velocity-discord",
-    "velocity-discord-chat",
-    "velocity-jsq"
 )

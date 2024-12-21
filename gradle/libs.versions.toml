@@ -1,12 +1,10 @@
 [versions]
-adventure = "4.17.0"
 adventure-fabric = "6.1.0"
 fabric-placeholder-api = "2.5.1+1.21.3"
 flyway = "11.1.0"
 hikari = "6.2.1"
 jackson = "2.18.2" # Requires relocation
 jda = "5.2.1"
-junit-jupiter = "5.11.4"
 lettuce = "6.5.1.RELEASE"
 log4j = "2.24.3"
 lombok = "1.18.36"
@@ -15,8 +13,6 @@ mysql = "9.1.0"
 protobuf-java = "4.29.2"
 
 [libraries]
-adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
-adventure-text-serializer-legacy = { module = "net.kyori:adventure-text-serializer-legacy", version.ref = "adventure" }
 adventure-fabric = { module = "net.kyori:adventure-platform-fabric", version.ref = "adventure-fabric" }
 fabric-placeholder-api = { module = "eu.pb4:placeholder-api", version.ref = "fabric-placeholder-api" }
 flyway = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
@@ -27,7 +23,6 @@ jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson" }
 jda = { module = "net.dv8tion:JDA", version.ref = "jda" }
-junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
 lettuce-core = { module = "io.lettuce:lettuce-core", version.ref = "lettuce" }
 log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j" }
 log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }

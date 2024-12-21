@@ -35,8 +35,8 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	shadow project(":common-config")
-	// Required for relocation, from common-config
+	implementation project(":common-config")
+	// Must shadow Jackson for config
 	shadow libs.jackson.core
 	shadow libs.jackson.annotations
 	shadow libs.jackson.databind

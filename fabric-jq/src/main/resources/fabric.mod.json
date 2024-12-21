@@ -1,0 +1,34 @@
+{
+	"schemaVersion": 1,
+	"id": "seers-jq",
+	"version": "${version}",
+	"name": "Seer's JQ",
+	"description": "A mod that provides some more interesting join/quit messages for players",
+	"authors": [
+		"seeruk"
+	],
+	"contact": {
+		"homepage": "https://github.com/seeruk/minecraft-bits",
+		"sources": "https://github.com/seeruk/minecraft-bits"
+	},
+	"license": "MIT",
+	"icon": "assets/seers-jq/icon.png",
+	"environment": "server",
+	"entrypoints": {
+		"server": [
+			"dev.seeruk.mod.fabric.jq.JqMod"
+		]
+	},
+	"mixins": [
+		"seers-jq.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.9",
+		"minecraft": "~1.21.4",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"seers-discord": ">=1.0"
+	}
+}

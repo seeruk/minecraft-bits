@@ -1,5 +1,6 @@
 plugins {
     id "java-library"
+    id "com.gradleup.shadow" version "8.3.5"
 }
 
 repositories {
@@ -19,4 +20,10 @@ dependencies {
 
 java {
     toolchain.setLanguageVersion(JavaLanguageVersion.of(17))
+}
+
+shadowJar {
+    configurations = [project.configurations.shadow]
+
+    relocate "com.fasterxml.jackson", "dev.seeruk.com.fasterxml.jackson"
 }

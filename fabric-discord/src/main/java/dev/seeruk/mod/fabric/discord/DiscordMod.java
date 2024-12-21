@@ -24,74 +24,79 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DiscordMod extends Container implements ModInitializer {
-	public static final String MOD_ID = "seers-discord";
+    public static final String MOD_ID = "seers-discord";
 
-	// This logger is used to write text to the console and the log file.
-	// It is considered best practice to use your mod id as the logger's name.
-	// That way, it's clear which mod wrote info, warnings, and errors.
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    // This logger is used to write text to the console and the log file.
+    // It is considered best practice to use your mod id as the logger's name.
+    // That way, it's clear which mod wrote info, warnings, and errors.
+    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	// Keeps track of when each player joined the server.
-	@Getter
+    // Keeps track of when each player joined the server.
+    @Getter
     private final Map<String, Instant> playerConnectTimes = new HashMap<>();
 
-	@Getter
-	private static DiscordMod instance;
+    @Getter
+    private static DiscordMod instance;
 
-	@Override
-	public void onInitialize() {
-		instance = this;
+    @Override
+    public void onInitialize() {
+        instance = this;
 
-		var configManager = new ConfigManager(getConfigFolder(), LOGGER, this, MOD_ID);
-		configManager.saveResource("config.dist.yml", true);
+        var configManager = new ConfigManager(getConfigFolder(), LOGGER, this, MOD_ID);
+        configManager.saveResource("config.dist.yml", true);
 
-		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
-			setConfig(configManager.getConfigWithDefaults(Config.class).orElseThrow());
-			setServer(server);
-			onServerReady();
-		});
+        setConfig(configManager.getConfigWithDefaults(Config.class).orElseThrow());
 
-		ServerPlayConnectionEvents.JOIN.register((evt, sender, server) -> {
-			playerConnectTimes.put(evt.player.getGameProfile().getName(), Instant.now());
-		});
+        setJdaBuilder(JDABuilder.createDefault(getConfig().discordToken)
+            .setEventManager(new AnnotatedEventManager())
+            .addEventListeners(this, new PlayerListCommand(this, getServer())));
 
-		ServerPlayConnectionEvents.DISCONNECT.register((evt, server) -> {
-			playerConnectTimes.remove(evt.player.getGameProfile().getName());
-		});
-	}
+        try {
+            setJda(getJdaBuilder().build());
+            getJda().awaitReady();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
-	public void onServerReady() {
-		LOGGER.info("Initialised");
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+            setServer(server);
+            onServerReady();
+        });
 
-		setJdaBuilder(JDABuilder.createDefault(getConfig().discordToken)
-			.setEventManager(new AnnotatedEventManager())
-			.addEventListeners(this, new PlayerListCommand(this, getServer())));
+        ServerPlayConnectionEvents.JOIN.register((evt, sender, server) -> {
+            playerConnectTimes.put(evt.player.getGameProfile().getName(), Instant.now());
+        });
 
-		// TODO: Inside event handler.
-		setJda(getJdaBuilder().build());
-	}
+        ServerPlayConnectionEvents.DISCONNECT.register((evt, server) -> {
+            playerConnectTimes.remove(evt.player.getGameProfile().getName());
+        });
+    }
+
+    public void onServerReady() {
+        LOGGER.info("Initialised");
+    }
 
     private static Path getConfigFolder() {
-		return FabricLoader.getInstance().getConfigDir().resolve(MOD_ID);
-	}
+        return FabricLoader.getInstance().getConfigDir().resolve(MOD_ID);
+    }
 
-	@SubscribeEvent
-	private void onReady(ReadyEvent event) {
-		this.registerCommands();
-		LOGGER.info("Discord bot is ready!");
-	}
+    @SubscribeEvent
+    private void onReady(ReadyEvent event) {
+        this.registerCommands();
+        LOGGER.info("Discord bot is ready!");
+    }
 
-	@SubscribeEvent
-	private void onShutdown(ShutdownEvent event) {
-		LOGGER.info("Discord has shut down");
-	}
+    @SubscribeEvent
+    private void onShutdown(ShutdownEvent event) {
+        LOGGER.info("Discord has shut down");
+    }
 
-	private void registerCommands() {
-		getJda().updateCommands()
-			.addCommands(Commands.slash(
-				"playerlist",
-				"Lists players online"
-			))
-			.queue();
-	}
+    private void registerCommands() {
+        getJda().updateCommands()
+            .addCommands(Commands.slash(
+                "playerlist",
+                "Lists players online"
+            ))
+            .queue();
+    }
 }

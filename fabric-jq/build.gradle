@@ -24,9 +24,6 @@ loom {
 }
 
 dependencies {
-	compileOnly libs.lombok
-	annotationProcessor libs.lombok
-
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
@@ -34,17 +31,19 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation libs.fabric.placeholder.api
+	modImplementation libs.adventure.fabric
+	include libs.adventure.fabric
 
-	shadow project(":common-config")
+	implementation project(":common-config")
 	// Must shadow Jackson for config
 	shadow libs.jackson.core
 	shadow libs.jackson.annotations
 	shadow libs.jackson.databind
 	shadow libs.jackson.dataformat.yaml
 
-	modImplementation libs.adventure.fabric
-	include libs.adventure.fabric
-	compileOnly libs.luckperms
+	compileOnly project(":fabric-discord")
+	compileOnly libs.jda
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -75,6 +74,7 @@ shadowJar {
 	configurations = [project.configurations.shadow]
 
 	relocate "com.fasterxml.jackson", "dev.seeruk.com.fasterxml.jackson"
+	relocate "com.sun.jna", "dev.seeruk.com.sun.jna"
 }
 
 remapJar {

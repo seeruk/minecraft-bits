@@ -41,6 +41,11 @@ dependencies {
 	modImplementation libs.fabric.placeholder.api
 
 	shadow project(":common-config")
+	// Must shadow Jackson for config
+	shadow libs.jackson.core
+	shadow libs.jackson.annotations
+	shadow libs.jackson.databind
+	shadow libs.jackson.dataformat.yaml
 
 	shadow libs.flyway
 	shadow libs.flyway.mysql
@@ -79,6 +84,7 @@ shadowJar {
 
 	// Can we just enable this on a "release" build or something?
 	//enableRelocation = true
+	relocate "com.fasterxml.jackson", "dev.seeruk.com.fasterxml.jackson"
 
 	// For Flyway:
 	mergeServiceFiles()

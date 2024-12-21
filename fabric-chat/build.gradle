@@ -40,11 +40,15 @@ dependencies {
 	modImplementation libs.adventure.fabric
 	include libs.adventure.fabric
 
-	shadow project(":common-chat")
 	shadow project(":common-config")
+	// Must shadow Jackson for config
+	shadow libs.jackson.core
+	shadow libs.jackson.annotations
+	shadow libs.jackson.databind
+	shadow libs.jackson.dataformat.yaml
 
-	shadow libs.lettuce.core
-	shadow libs.protobuf.java
+	compileOnly project(":fabric-discord")
+	compileOnly libs.jda
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -73,6 +77,8 @@ processResources {
 
 shadowJar {
 	configurations = [project.configurations.shadow]
+
+	relocate "com.fasterxml.jackson", "dev.seeruk.com.fasterxml.jackson"
 }
 
 remapJar {
