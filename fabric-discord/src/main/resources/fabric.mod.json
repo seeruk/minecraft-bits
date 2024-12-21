@@ -1,9 +1,9 @@
 {
 	"schemaVersion": 1,
-	"id": "seers-propswap",
+	"id": "seers-discord",
 	"version": "${version}",
-	"name": "Seer's PropSwap",
-	"description": "A mod that allows certain tools to work a little bit like the debug stick",
+	"name": "Seer's Discord",
+	"description": "A mod that provides a central point of access to Discord via JDA for other mods",
 	"authors": [
 		"seeruk"
 	],
@@ -12,15 +12,15 @@
 		"sources": "https://github.com/seeruk/minecraft-bits"
 	},
 	"license": "MIT",
-	"icon": "assets/seers-propswap/icon.png",
+	"icon": "assets/seers-discord/icon.png",
 	"environment": "server",
 	"entrypoints": {
 		"main": [
-			"dev.seeruk.mod.fabric.propswap.PropSwapMod"
+			"dev.seeruk.mod.fabric.discord.DiscordMod"
 		]
 	},
 	"mixins": [
-		"seers-propswap.mixins.json"
+		"seers-discord.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.16.9",

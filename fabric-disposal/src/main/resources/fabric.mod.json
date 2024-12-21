@@ -8,8 +8,8 @@
 		"seeruk"
 	],
 	"contact": {
-		"homepage": "https://github.com/seeruk/fabric-mods",
-		"sources": "https://github.com/seeruk/fabric-mods"
+		"homepage": "https://github.com/seeruk/minecraft-bits",
+		"sources": "https://github.com/seeruk/minecraft-bits"
 	},
 	"license": "MIT",
 	"icon": "assets/seers-disposal/icon.png",

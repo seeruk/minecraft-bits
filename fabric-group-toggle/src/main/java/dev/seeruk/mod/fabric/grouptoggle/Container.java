@@ -6,15 +6,12 @@ import lombok.Setter;
 import net.kyori.adventure.platform.modcommon.MinecraftServerAudiences;
 import net.minecraft.server.MinecraftServer;
 
+@Getter
 @Setter
-public class Container {
-
-    @Getter
+public abstract class Container {
     private Config config;
 
-    @Getter
     private volatile MinecraftServerAudiences adventure;
 
-    @Getter
     private MinecraftServer server;
 }
