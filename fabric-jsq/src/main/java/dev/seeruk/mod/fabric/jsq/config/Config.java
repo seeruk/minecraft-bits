@@ -6,4 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Config {
     public String redisUri;
     public String redisChannel;
+
+    public boolean sendMessages;
 }

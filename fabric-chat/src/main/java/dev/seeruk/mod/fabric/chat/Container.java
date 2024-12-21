@@ -10,7 +10,7 @@ import io.lettuce.core.codec.StringCodec;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 import lombok.Getter;
 import lombok.Setter;
-import net.kyori.adventure.platform.fabric.FabricServerAudiences;
+import net.kyori.adventure.platform.modcommon.MinecraftServerAudiences;
 import net.minecraft.server.MinecraftServer;
 
 @Setter
@@ -19,7 +19,7 @@ public abstract class Container {
     protected Config config;
 
     @Getter
-    private volatile FabricServerAudiences adventure;
+    private volatile MinecraftServerAudiences adventure;
 
     @Getter
     private MinecraftServer server;

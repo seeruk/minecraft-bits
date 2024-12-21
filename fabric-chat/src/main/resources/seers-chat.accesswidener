@@ -1,3 +1,4 @@
 accessWidener v2 named
 
 accessible class net/minecraft/registry/RegistryLoader$Loader
+accessible class net/minecraft/registry/RegistryLoader$RegistryLoadable

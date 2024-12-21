@@ -6,9 +6,9 @@ import dev.seeruk.common.chat.ChatEventType;
 import dev.seeruk.mod.fabric.chat.config.Config;
 import dev.seeruk.mod.fabric.chat.text.TextUtils;
 import io.lettuce.core.pubsub.RedisPubSubAdapter;
-import net.kyori.adventure.platform.fabric.FabricServerAudiences;
+import net.kyori.adventure.platform.modcommon.MinecraftServerAudiences;
+import net.kyori.adventure.text.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.text.Text;
 import org.slf4j.Logger;
 
 /**
@@ -17,13 +17,13 @@ import org.slf4j.Logger;
  */
 public class ChatListener extends RedisPubSubAdapter<String, byte[]> {
 
-    private final FabricServerAudiences adventure;
+    private final MinecraftServerAudiences adventure;
     private final Config config;
     private final Logger logger;
     private final MinecraftServer server;
 
     public ChatListener(
-        FabricServerAudiences adventure,
+        MinecraftServerAudiences adventure,
         Config config,
         Logger logger,
         MinecraftServer server
@@ -61,7 +61,7 @@ public class ChatListener extends RedisPubSubAdapter<String, byte[]> {
         server.executeSync(() -> {
             var formatted = !event.getFormatted().isEmpty()
                 ? TextUtils.deserialize(event.getFormatted())
-                : Text.of(event.getMessage());
+                : Component.text(event.getMessage());
 
             server.getPlayerManager().getPlayerList().forEach(player -> {
                 var audience = adventure.audience(player);
