@@ -13,7 +13,7 @@
 	},
 	"license": "MIT",
 	"icon": "assets/seers-disposal/icon.png",
-	"environment": "server",
+	"environment": "*",
 	"entrypoints": {
 		"main": [
 			"dev.seeruk.mod.fabric.disposal.DisposalMod"
@@ -21,8 +21,8 @@
 	},
 	"mixins": [],
 	"depends": {
-		"fabricloader": ">=0.16.2",
-		"minecraft": "~1.21.1",
+		"fabricloader": ">=0.16.9",
+		"minecraft": "~1.21.4",
 		"java": ">=21",
 		"fabric-api": "*"
 	},

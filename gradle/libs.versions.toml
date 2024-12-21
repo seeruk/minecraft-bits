@@ -1,18 +1,18 @@
 [versions]
 adventure = "4.17.0"
-adventure-fabric = "5.14.1"
-fabric-placeholder-api = "2.4.1+1.21"
-flyway = "10.20.1"
-hikari = "6.0.0"
-jackson = "2.18.0"
-jda = "5.1.2"
-junit-jupiter = "5.10.3"
-lettuce = "6.3.2.RELEASE"
-log4j = "2.22.1"
-lombok = "1.18.34"
+adventure-fabric = "6.1.0"
+fabric-placeholder-api = "2.5.1+1.21.3"
+flyway = "11.1.0"
+hikari = "6.2.1"
+jackson = "2.13.4" # Matches Minecraft included version
+jda = "5.2.1"
+junit-jupiter = "5.11.4"
+lettuce = "6.5.1.RELEASE"
+log4j = "2.24.3"
+lombok = "1.18.36"
 luckperms = "5.4"
-mysql = "8.4.0"
-protobuf-java = "4.28.3"
+mysql = "9.1.0"
+protobuf-java = "4.29.2"
 
 [libraries]
 adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }

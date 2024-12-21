@@ -7,7 +7,7 @@ import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
-import net.kyori.adventure.platform.fabric.FabricServerAudiences;
+import net.kyori.adventure.platform.modcommon.MinecraftServerAudiences;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +36,7 @@ public class GroupToggleMod extends Container implements ModInitializer {
 
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 			setConfig(configManager.getConfigWithDefaults(Config.class).orElseThrow());
-			setAdventure(FabricServerAudiences.of(server));
+			setAdventure(MinecraftServerAudiences.of(server));
 			setServer(server);
 			onServerReady();
 		});

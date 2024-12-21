@@ -4,12 +4,12 @@ import dev.seeruk.mod.fabric.nicks.NicksEvent;
 import dev.seeruk.mod.fabric.nicks.NicksMod;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public abstract class AbstractUpdateCommand {
@@ -58,12 +58,10 @@ public abstract class AbstractUpdateCommand {
 
         playerUpdateTimes.put(player.getUuid(), Instant.now());
 
-        var feedback = Text.empty();
-
         // TODO: Configurable message?
-        feedback.append(adventure.toNative(miniMessage.deserialize("""
-            <green>You are now known as </green>""")));
-        feedback.append(player.getDisplayName());
+        var feedback = miniMessage
+            .deserialize("<green>You are now known as </green>")
+            .append(Objects.requireNonNull(adventure.asAdventure(player.getDisplayName())));
 
         audience.sendMessage(feedback);
         return 1;

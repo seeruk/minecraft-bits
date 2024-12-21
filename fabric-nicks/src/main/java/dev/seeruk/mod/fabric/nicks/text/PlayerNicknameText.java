@@ -43,7 +43,7 @@ public class PlayerNicknameText {
         // Create the coloured component
         var component = miniMessage.deserialize(String.format("<%1$s>%2$s</%1$s>", colour, nick));
 
-        return adventure.toNative(component);
+        return adventure.asNative(component);
     }
 
     public static Text getUnformatted(PlayerEntity player) {
