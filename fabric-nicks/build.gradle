@@ -85,6 +85,7 @@ shadowJar {
 	// Can we just enable this on a "release" build or something?
 	//enableRelocation = true
 	relocate "com.fasterxml.jackson", "dev.seeruk.com.fasterxml.jackson"
+	relocate "com.google.protobuf", "dev.seeruk.com.google.protobuf"
 
 	// For Flyway:
 	mergeServiceFiles()
