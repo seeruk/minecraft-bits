@@ -59,7 +59,7 @@ public class ChatMod extends Container implements DedicatedServerModInitializer 
         LOGGER.info("Initialised");
 
         if (getConfig().discord.enabled && FabricLoader.getInstance().isModLoaded("seers-discord")) {
-            this.discordListener = new DiscordListener(config.discord);
+            this.discordListener = new DiscordListener(MinecraftServerAudiences.of(getServer()), getServer(), config.discord);
             this.discordListener.register();
             this.discordListener.onStarted();
         }

@@ -18,11 +18,9 @@ public class PlayerListCommand {
     private static final String NAME = "playerlist";
 
     private final DiscordMod mod;
-    private final MinecraftServer server;
 
-    public PlayerListCommand(DiscordMod mod, MinecraftServer server) {
+    public PlayerListCommand(DiscordMod mod) {
         this.mod = mod;
-        this.server = server;
     }
 
     @SubscribeEvent
@@ -33,6 +31,12 @@ public class PlayerListCommand {
 
         // Tell people we're thinking...
         event.deferReply().queue();
+
+        var server = this.mod.getServer();
+        if (server == null) {
+            // Server must be ready before this command can be used.
+            return;
+        }
 
         var connectedTimes = mod.getPlayerConnectTimes();
         var onlinePlayers = server.getPlayerManager().getPlayerList();

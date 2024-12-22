@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.events.session.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.AnnotatedEventManager;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -48,8 +49,9 @@ public class DiscordMod extends Container implements ModInitializer {
         setConfig(configManager.getConfigWithDefaults(Config.class).orElseThrow());
 
         setJdaBuilder(JDABuilder.createDefault(getConfig().discordToken)
+            .enableIntents(GatewayIntent.MESSAGE_CONTENT)
             .setEventManager(new AnnotatedEventManager())
-            .addEventListeners(this, new PlayerListCommand(this, getServer())));
+            .addEventListeners(this, new PlayerListCommand(this)));
 
         try {
             setJda(getJdaBuilder().build());

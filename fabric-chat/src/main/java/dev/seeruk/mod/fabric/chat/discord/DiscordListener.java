@@ -12,18 +12,31 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.SubscribeEvent;
+import net.kyori.adventure.platform.modcommon.MinecraftServerAudiences;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.awt.*;
 import java.util.Optional;
 
 public class DiscordListener {
+    private final MinecraftServerAudiences adventure;
     private final Config.DiscordConfig config;
     private final JDA jda;
+    private final MinecraftServer server;
 
-    public DiscordListener(Config.DiscordConfig config) {
+    private final MiniMessage miniMessage = MiniMessage.miniMessage();
+
+    public DiscordListener(MinecraftServerAudiences adventure, MinecraftServer server, Config.DiscordConfig config) {
+        this.adventure = adventure;
         this.config = config;
+        this.server = server;
+
         this.jda = DiscordMod.getInstance().getJda();
+        this.jda.addEventListener(this);
     }
 
     public void register() {
@@ -50,6 +63,35 @@ public class DiscordListener {
 
     public void onStopping() {
         sendMessageEmbed(formatServerStopping());
+    }
+
+    @SubscribeEvent
+    private void onMessageReceived(MessageReceivedEvent event) {
+        if (!event.getMessage().getChannelId().equals(config.channelId)) {
+            // We only care about messages from our configured channel
+            return;
+        }
+
+        var content = event.getMessage().getContentDisplay();
+        if (content.isEmpty()) {
+            // Don't care about empty messages
+            return;
+        }
+
+        if (event.getAuthor().isBot()) {
+            // Ignore all bots, including ourselves
+            return;
+        }
+
+        var component = miniMessage.deserialize(String.format(
+            "<blue>Discord ›</blue> %s <gray>»</gray> %s",
+            event.getAuthor().getEffectiveName(),
+            event.getMessage().getContentDisplay()
+        ));
+
+        server.getPlayerManager().getPlayerList().forEach(player -> {
+            adventure.audience(player).sendMessage(component);
+        });
     }
 
     private void sendMessage(String message) {
