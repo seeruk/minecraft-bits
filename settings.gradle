@@ -7,6 +7,11 @@ pluginManagement {
             name = "Fabric"
             url = "https://maven.fabricmc.net/"
         }
+
+        maven {
+            name = "Nucleoid"
+            url = 'https://maven.nucleoid.xyz/'
+        }
     }
 }
 
@@ -21,4 +26,5 @@ include(
     "fabric-jq",
     "fabric-nicks",
     "fabric-propswap",
+    "fabric-worlds",
 )

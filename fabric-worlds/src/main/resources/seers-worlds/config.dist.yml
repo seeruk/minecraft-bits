@@ -1,0 +1,13 @@
+worlds:
+- namespace: seers_worlds
+  name: overworld
+  seed: 1234
+  type: OVERWORLD
+- namespace: seers_worlds
+  name: the_nether
+  seed: 1234
+  type: THE_NETHER
+- namespace: seers_worlds
+  name: the_end
+  seed: 1234
+  type: THE_END

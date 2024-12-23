@@ -1,0 +1,32 @@
+{
+	"schemaVersion": 1,
+	"id": "seers-worlds",
+	"version": "${version}",
+	"name": "Seer's Worlds",
+	"description": "A mod that allows extra dimensions to be added to a server",
+	"authors": [
+		"seeruk"
+	],
+	"contact": {
+		"homepage": "https://github.com/seeruk/minecraft-bits",
+		"sources": "https://github.com/seeruk/minecraft-bits"
+	},
+	"license": "MIT",
+	"icon": "assets/seers-worlds/icon.png",
+	"environment": "server",
+	"entrypoints": {
+		"main": [
+			"dev.seeruk.mod.fabric.worlds.WorldsMod"
+		]
+	},
+	"mixins": [
+		"seers-worlds.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.9",
+		"minecraft": "~1.21.4",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {}
+}
