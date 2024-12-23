@@ -4,7 +4,7 @@ import dev.seeruk.mod.fabric.resourceworlds.ResourceWorldsMod;
 import dev.seeruk.mod.fabric.resourceworlds.database.MySQLStore;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
-import net.william278.huskhomes.event.TeleportWarmupCallback;
+import net.william278.huskhomes.event.TeleportCallback;
 import net.william278.huskhomes.user.FabricUser;
 
 import java.sql.SQLException;
@@ -12,8 +12,8 @@ import java.sql.SQLException;
 public class HuskHomesIntegration {
 
     public static void register() {
-        TeleportWarmupCallback.EVENT.register(teleport -> {
-            if (teleport.getTimedTeleport().getTeleporter() instanceof FabricUser user) {
+        TeleportCallback.EVENT.register(teleport -> {
+            if (teleport.getTeleport().getTeleporter() instanceof FabricUser user) {
                 return setPlayerLocation(user.getPlayer());
             }
             return ActionResult.PASS;
