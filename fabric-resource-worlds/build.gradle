@@ -47,6 +47,7 @@ dependencies {
 	shadow libs.mysql
 
 	modImplementation libs.fantasy
+	shadow libs.fantasy
 	modCompileOnly libs.huskhomes
 }
 
