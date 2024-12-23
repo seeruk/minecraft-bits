@@ -28,5 +28,7 @@
 		"java": ">=21",
 		"fabric-api": "*"
 	},
-	"suggests": {}
+	"suggests": {
+		"huskhomes": "4.8.3"
+	}
 }

@@ -4,6 +4,7 @@ import dev.seeruk.common.config.ConfigManager;
 import dev.seeruk.mod.fabric.resourceworlds.command.ResourceCommand;
 import dev.seeruk.mod.fabric.resourceworlds.config.Config;
 import dev.seeruk.mod.fabric.resourceworlds.database.Migrator;
+import dev.seeruk.mod.fabric.resourceworlds.integration.HuskHomesIntegration;
 import lombok.Getter;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -65,6 +66,10 @@ public class ResourceWorldsMod extends Container implements DedicatedServerModIn
 		migrator.migrate();
 
 		ensureWorldsExist();
+
+		if (FabricLoader.getInstance().isModLoaded("huskhomes")) {
+			HuskHomesIntegration.register();
+		}
 
 		LOGGER.info("Initialised");
 	}

@@ -4,6 +4,7 @@ fabric-placeholder-api = "2.5.1+1.21.3"
 fantasy = "0.6.5+1.21.2"
 flyway = "11.1.0"
 hikari = "6.2.1"
+huskhomes = "4.8.3+1.21.4"
 jackson = "2.18.2" # Requires relocation
 jda = "5.2.1"
 lettuce = "6.5.1.RELEASE"
@@ -20,6 +21,7 @@ fantasy = { module = "xyz.nucleoid:fantasy", version.ref = "fantasy" }
 flyway = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
 flyway-mysql = { module = "org.flywaydb:flyway-mysql", version.ref = "flyway" }
 hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
+huskhomes = { module = "net.william278.huskhomes:huskhomes-fabric", version.ref = "huskhomes" }
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
 jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
