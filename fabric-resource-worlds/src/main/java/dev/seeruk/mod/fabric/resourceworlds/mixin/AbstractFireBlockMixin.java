@@ -28,6 +28,9 @@ public class AbstractFireBlockMixin {
         boolean notify,
         CallbackInfo ci
     ) {
-        ci.cancel();
+        // Disable nether portal ignition in resource worlds
+        if (world.getRegistryKey().getValue().toString().startsWith("resource:")) {
+            ci.cancel();
+        }
     }
 }

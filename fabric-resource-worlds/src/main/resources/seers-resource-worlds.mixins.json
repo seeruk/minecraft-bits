@@ -3,7 +3,10 @@
     "package": "dev.seeruk.mod.fabric.resourceworlds.mixin",
     "compatibilityLevel": "JAVA_21",
     "mixins": [
-        "AbstractFireBlockMixin"
+        "AbstractFireBlockMixin",
+        "EndPortalFrameMixin",
+        "EndPortalMixin",
+        "NetherPortalBlockMixin"
     ],
     "injectors": {
         "defaultRequire": 1

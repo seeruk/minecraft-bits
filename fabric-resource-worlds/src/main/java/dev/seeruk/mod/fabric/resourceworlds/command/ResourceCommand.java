@@ -104,14 +104,7 @@ public class ResourceCommand {
                 .findFirst()
                 .orElse(mod.getServer().getOverworld());
 
-            target = new TeleportTarget(
-                world,
-                location,
-                Vec3d.ZERO,
-                yaw,
-                pitch,
-                TeleportTarget.NO_OP
-            );
+            target = new TeleportTarget(world, location, Vec3d.ZERO, yaw, pitch, TeleportTarget.NO_OP);
         } else {
             // Handle entering a resource world
             var world = worlds.get(destination).asWorld();
@@ -126,14 +119,7 @@ public class ResourceCommand {
             var yaw = playerLocation.map(MySQLStore.PlayerLocation::yaw).orElse(0f);
             var pitch = playerLocation.map(MySQLStore.PlayerLocation::pitch).orElse(0f);
 
-            target = new TeleportTarget(
-                world,
-                location,
-                Vec3d.ZERO,
-                yaw,
-                pitch,
-                TeleportTarget.NO_OP
-            );
+            target = new TeleportTarget(world, location, Vec3d.ZERO, yaw, pitch, TeleportTarget.NO_OP);
         }
 
         player.teleportTo(target);
