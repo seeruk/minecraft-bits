@@ -26,5 +26,5 @@ include(
     "fabric-jq",
     "fabric-nicks",
     "fabric-propswap",
-    "fabric-worlds",
+    "fabric-resource-worlds",
 )

@@ -1,0 +1,27 @@
+database:
+  url: jdbc:mysql://localhost/seers_resource_worlds
+  username: seers_resource_worlds
+  password: changeme
+
+# You should identify a safe place for players to spawn in and configure those spawn points below.
+# They can be anywhere in that world. The player will be sent there the first time they enter.
+
+dimensions:
+  overworld:
+    seed: 1234
+    spawn:
+      x: 0
+      y: 100
+      z: 0
+  nether:
+    seed: 1234
+    spawn:
+      x: 0
+      y: 100
+      z: 0
+  end:
+    seed: 1234
+    spawn:
+      x: 0
+      y: 100
+      z: 0

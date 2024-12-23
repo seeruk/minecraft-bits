@@ -1,9 +1,9 @@
 {
 	"schemaVersion": 1,
-	"id": "seers-worlds",
+	"id": "seers-resource-worlds",
 	"version": "${version}",
-	"name": "Seer's Worlds",
-	"description": "A mod that allows extra dimensions to be added to a server",
+	"name": "Seer's Resource Worlds",
+	"description": "A mod that adds resource worlds that can be teleported to",
 	"authors": [
 		"seeruk"
 	],
@@ -12,15 +12,15 @@
 		"sources": "https://github.com/seeruk/minecraft-bits"
 	},
 	"license": "MIT",
-	"icon": "assets/seers-worlds/icon.png",
+	"icon": "assets/seers-resource-worlds/icon.png",
 	"environment": "server",
 	"entrypoints": {
-		"main": [
-			"dev.seeruk.mod.fabric.worlds.WorldsMod"
+		"server": [
+			"dev.seeruk.mod.fabric.resourceworlds.ResourceWorldsMod"
 		]
 	},
 	"mixins": [
-		"seers-worlds.mixins.json"
+		"seers-resource-worlds.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.16.9",

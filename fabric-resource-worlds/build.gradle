@@ -20,7 +20,6 @@ loom {
 			sourceSet sourceSets.client
 		}
 	}
-
 }
 
 dependencies {
@@ -35,12 +34,17 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	implementation project(":common-config")
+	shadow project(":common-config")
 	// Must shadow Jackson for config
 	shadow libs.jackson.core
 	shadow libs.jackson.annotations
 	shadow libs.jackson.databind
 	shadow libs.jackson.dataformat.yaml
+
+	shadow libs.flyway
+	shadow libs.flyway.mysql
+	shadow libs.hikari
+	shadow libs.mysql
 
 	modImplementation libs.fantasy
 }
@@ -72,7 +76,12 @@ processResources {
 shadowJar {
 	configurations = [project.configurations.shadow]
 
+	// Can we just enable this on a "release" build or something?
+	//enableRelocation = true
 	relocate "com.fasterxml.jackson", "dev.seeruk.com.fasterxml.jackson"
+
+	// For Flyway:
+	mergeServiceFiles()
 }
 
 remapJar {
