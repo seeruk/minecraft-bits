@@ -10,6 +10,7 @@ import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionTypes;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import xyz.nucleoid.fantasy.RuntimeWorldHandle;
 
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ResourceWorldsMod extends Container implements DedicatedServerModInitializer {
@@ -79,21 +81,24 @@ public class ResourceWorldsMod extends Container implements DedicatedServerModIn
 
 		var overworld = new RuntimeWorldConfig()
 			.setDimensionType(DimensionTypes.OVERWORLD)
-			.setDifficulty(getServer().getSaveProperties().getDifficulty())
 			.setGenerator(getServer().getOverworld().getChunkManager().getChunkGenerator())
 			.setSeed(getConfig().dimensions.get(WORLD_OVERWORLD).seed);
 
 		var nether = new RuntimeWorldConfig()
 			.setDimensionType(DimensionTypes.THE_NETHER)
-			.setDifficulty(getServer().getSaveProperties().getDifficulty())
 			.setGenerator(getServer().getWorld(World.NETHER).getChunkManager().getChunkGenerator())
 			.setSeed(getConfig().dimensions.get(WORLD_NETHER).seed);
 
 		var end = new RuntimeWorldConfig()
 			.setDimensionType(DimensionTypes.THE_END)
-			.setDifficulty(getServer().getSaveProperties().getDifficulty())
 			.setGenerator(getServer().getWorld(World.END).getChunkManager().getChunkGenerator())
 			.setSeed(getConfig().dimensions.get(WORLD_END).seed);
+
+		List.of(overworld, nether, end).forEach(config -> {
+			config.setDifficulty(getServer().getSaveProperties().getDifficulty());
+			config.setMirrorOverworldGameRules(true);
+			config.setShouldTickTime(true);
+		});
 
 		var overworldHandle = fantasy.getOrOpenPersistentWorld(Identifier.of("resource", "overworld"), overworld);
 		var netherHandle = fantasy.getOrOpenPersistentWorld(Identifier.of("resource", "the_nether"), nether);
