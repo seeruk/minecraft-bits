@@ -78,7 +78,6 @@ public class NicksMod extends Container implements DedicatedServerModInitializer
 		getRedisClient().close();
 		getRedisConn().close();
 
-		setAdventure(null);
 		setRedisClient(null);
 		setRedisConn(null);
 	}
