@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"id": "seers-lore",
+	"version": "${version}",
+	"name": "Seer's Lore",
+	"description": "A mod that allows items to be renamed and lore to be set on items",
+	"authors": [
+		"seeruk"
+	],
+	"contact": {
+		"homepage": "https://github.com/seeruk/minecraft-bits",
+		"sources": "https://github.com/seeruk/minecraft-bits"
+	},
+	"license": "MIT",
+	"icon": "assets/seers-lore/icon.png",
+	"environment": "server",
+	"entrypoints": {
+		"server": [
+			"dev.seeruk.mod.fabric.lore.LoreMod"
+		]
+	},
+	"mixins": [],
+	"depends": {
+		"fabricloader": ">=0.16.9",
+		"minecraft": "~1.21.4",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {}
+}

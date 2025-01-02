@@ -24,6 +24,7 @@ include(
     "fabric-disposal",
     "fabric-group-toggle",
     "fabric-jq",
+    "fabric-lore",
     "fabric-nicks",
     "fabric-propswap",
     "fabric-resource-worlds",

@@ -1,5 +1,6 @@
 [versions]
 adventure-fabric = "6.1.0"
+adventure-legacy = "4.18.0"
 fabric-placeholder-api = "2.5.1+1.21.3"
 fantasy = "0.6.5+1.21.2"
 flyway = "11.1.0"
@@ -16,6 +17,7 @@ protobuf-java = "4.29.2"
 
 [libraries]
 adventure-fabric = { module = "net.kyori:adventure-platform-fabric", version.ref = "adventure-fabric" }
+adventure-legacy = { module = "net.kyori:adventure-text-serializer-legacy", version.ref = "adventure-legacy" }
 fabric-placeholder-api = { module = "eu.pb4:placeholder-api", version.ref = "fabric-placeholder-api" }
 fantasy = { module = "xyz.nucleoid:fantasy", version.ref = "fantasy" }
 flyway = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
